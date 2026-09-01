@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #fff; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { margin-bottom: 30px; color: #c9a84c; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: rgba(10, 10, 10, 0.95); padding: 15px; border-radius: 8px; text-align: center; }
+        .stat-card h3 { color: #888; font-size: 0.85em; margin-bottom: 8px; }
+        .stat-card .number { font-size: 2em; font-weight: 700; color: #c9a84c; }
+        .filters { margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .filters select, .filters button, .filters input { padding: 10px 15px; background: rgba(201, 168, 76, 0.2); border: 1px solid rgba(201, 168, 76, 0.5); border-radius: 6px; color: #fff; cursor: pointer; font-size: 14px; }
+        .filters button:hover { background: rgba(201, 168, 76, 0.3); }
+        .filters input { flex: 1; min-width: 200px; }
+        table { width: 100%; border-collapse: collapse; background: rgba(10, 10, 10, 0.95); border-radius: 8px; overflow: hidden; font-size: 0.9em; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { background: rgba(201, 168, 76, 0.2); color: #c9a84c; font-weight: 600; }
+        tr:hover { background: rgba(201, 168, 76, 0.05); }
+        .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.8em; font-weight: 600; }
+        .status-pending { background: rgba(255, 152, 0, 0.2); color: #ff9800; }
+        .status-verified { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+        .status-paid { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
+        .status-rejected { background: rgba(255, 100, 100, 0.2); color: #ff6464; }
+        .action-btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85em; margin-right: 4px; }
+        .btn-verify { background: #4caf50; color: #fff; }
+        .btn-reject { background: #ff6464; color: #fff; }
+        .btn-paid { background: #2196f3; color: #fff; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: #1a1a2e; padding: 25px; border-radius: 12px; max-width: 400px; width: 90%; }
+        .modal-content h3 { margin-bottom: 15px; color: #c9a84c; }
+        .modal-content textarea { width: 100%; padding: 10px; background: rgba(10, 10, 10, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; margin-bottom: 15px; min-height: 80px; font-size: 14px; }
+        .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
+        .modal-buttons button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        .btn-cancel { background: rgba(255,255,255,0.1); color: #fff; }
+        .btn-confirm { background: #c9a84c; color: #000; }
+        @media (max-width: 600px) {
+            table { font-size: 0.8em; }
+            th, td { padding: 8px; }
+            .hide-mobile { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Giveaway Admin Dashboard</h1>
+        <div class="stats" id="stats">
+            <div class="stat-card"><h3>Total</h3><div class="number" id="statTotal">-</div></div>
+            <div class="stat-card"><h3>Pending</h3><div class="number" id="statPending">-</div></div>
+            <div class="stat-card"><h3>Verified</h3><div class="number" id="statVerified">-</div></div>
+            <div class="stat-card"><h3>Paid</h3><div class="number" id="statPaid">-</div></div>
+        </div>
+        <div class="filters">
+            <input type="password" id="adminKeyInput" placeholder="Enter Admin Key">
+            <select id="statusFilter" onchange="loadClaims()">
+                <option value="pending">Pending</option>
+                <option value="verified">Verified</option>
+                <option value="paid">Paid</option>
+                <option value="rejected">Rejected</option>
+            </select>
+            <button onclick="loadClaims()">Refresh</button>
+            <button onclick="exportCSV()">Export CSV</button>
+        </div>
+        <table id="claimsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th class="hide-mobile">USDT</th>
+                    <th class="hide-mobile">Token</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="claimsBody"><tr><td colspan="6" style="text-align: center;">Enter key and click Refresh</td></tr></tbody>
+        </table>
+    </div>
+    <div class="modal" id="actionModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Add Note</h3>
+            <textarea id="adminNotes" placeholder="Enter admin notes..."></textarea>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-confirm" onclick="confirmAction()">Confirm</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const API_URL = window.location.origin;
+        let currentAction = null;
+        let currentId = null;
+        
+        function getKey() { return document.getElementById('adminKeyInput').value.trim(); }
+        function getHeaders() { return { 'x-admin-key': getKey() }; }
+        
+        async function loadStats() {
+            const key = getKey();
+            if (!key) return alert('Please enter the admin key first.');
+            try {
+                const res = await fetch(API_URL + '/api/admin/stats', { headers: getHeaders() });
+                if (!res.ok) throw new Error('Unauthorized');
+                const data = await res.json();
+                document.getElementById('statTotal').textContent = data.total.toLocaleString();
+                document.getElementById('statPending').textContent = data.pending.toLocaleString();
+                document.getElementById('statVerified').textContent = data.verified.toLocaleString();
+                document.getElementById('statPaid').textContent = data.paid.toLocaleString();
+            } catch (err) { alert('Invalid admin key or server error'); }
+        }
+        
+        async function loadClaims() {
+            const key = getKey();
+            if (!key) return alert('Please enter the admin key first.');
+            const status = document.getElementById('statusFilter').value;
+            try {
+                const res = await fetch(API_URL + `/api/admin/claims?status=${status}&limit=100`, { headers: getHeaders() });
+                if (!res.ok) throw new Error('Unauthorized');
+                const claims = await res.json();
+                const tbody = document.getElementById('claimsBody');
+                tbody.innerHTML = '';
+                
+                if (claims.length === 0) { 
+                    const tr = document.createElement('tr');
+                    const td = document.createElement('td');
+                    td.colSpan = 6; td.style.textAlign = 'center'; td.textContent = 'No claims found';
+                    tr.appendChild(td); tbody.appendChild(tr);
+                    return; 
+                }
+                
+                claims.forEach(claim => {
+                    const tr = document.createElement('tr');
+                    const createTd = (text, className = '') => {
+                        const td = document.createElement('td');
+                        td.textContent = text;
+                        if (className) td.className = className;
+                        return td;
+                    };
+                    
+                    tr.appendChild(createTd(claim.login_id));
+                    tr.appendChild(createTd(claim.email));
+                    
+                    const tdUsdt = document.createElement('td');
+                    tdUsdt.className = 'hide-mobile'; tdUsdt.style.fontFamily = 'monospace'; tdUsdt.style.fontSize = '0.85em';
+                    tdUsdt.textContent = claim.usdt_address.substring(0, 10) + '...';
+                    tr.appendChild(tdUsdt);
+                    
+                    const tdToken = document.createElement('td');
+                    tdToken.className = 'hide-mobile'; tdToken.style.fontFamily = 'monospace'; tdToken.style.fontSize = '0.85em';
+                    tdToken.textContent = claim.token_address.substring(0, 10) + '...';
+                    tr.appendChild(tdToken);
+                    
+                    const tdStatus = document.createElement('td');
+                    const badge = document.createElement('span');
+                    badge.className = `status-badge status-${claim.status}`;
+                    badge.textContent = claim.status;
+                    tdStatus.appendChild(badge);
+                    tr.appendChild(tdStatus);
+                    
+                    const tdActions = document.createElement('td');
+                    if (claim.status === 'pending') {
+                        const btnV = document.createElement('button'); btnV.className = 'action-btn btn-verify'; btnV.textContent = 'Verify'; btnV.onclick = () => openModal('verified', claim.id);
+                        const btnR = document.createElement('button'); btnR.className = 'action-btn btn-reject'; btnR.textContent = 'Reject'; btnR.onclick = () => openModal('rejected', claim.id);
+                        tdActions.appendChild(btnV); tdActions.appendChild(btnR);
+                    } else if (claim.status === 'verified') {
+                        const btnP = document.createElement('button'); btnP.className = 'action-btn btn-paid'; btnP.textContent = 'Paid'; btnP.onclick = () => openModal('paid', claim.id);
+                        tdActions.appendChild(btnP);
+                    }
+                    tr.appendChild(tdActions);
+                    tbody.appendChild(tr);
+                });
+            } catch (err) { alert('Invalid admin key or server error'); }
+        }
+        
+        function openModal(action, id) {
+            currentAction = action; currentId = id;
+            document.getElementById('modalTitle').textContent = action === 'verified' ? 'Verify Claim' : action === 'rejected' ? 'Reject Claim' : 'Mark as Paid';
+            document.getElementById('adminNotes').value = '';
+            document.getElementById('actionModal').classList.add('active');
+        }
+        function closeModal() { document.getElementById('actionModal').classList.remove('active'); currentAction = null; currentId = null; }
+        
+        async function confirmAction() {
+            const key = getKey();
+            const notes = document.getElementById('adminNotes').value;
+            try {
+                const res = await fetch(API_URL + `/api/admin/claims/${currentId}/status`, {
+                    method: 'POST', headers: { ...getHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify({ status: currentAction, admin_notes: notes })
+                });
+                if (res.ok) { closeModal(); loadClaims(); loadStats(); } else { alert('Failed to update claim'); }
+            } catch (err) { alert('Network error'); }
+        }
+        
+        function exportCSV() {
+            const key = getKey();
+            if (!key) return alert('Please enter the admin key first.');
+            window.location.href = API_URL + '/api/admin/export?key=' + key;
+        }
+    </script>
+</body>
+</html>

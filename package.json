@@ -1,0 +1,21 @@
+{
+  "name": "fan-drop-giveaway",
+  "version": "1.0.0",
+  "description": "Dishon Jay Fan Appreciation Giveaway",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.3",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.11.0",
+    "nanoid": "^3.3.7"
+  }
+}
