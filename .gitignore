@@ -6,3 +6,8 @@ key.pem
 *.db
 *.db-shm
 *.db-wal
+cert.pem
+key.pem
+*.db
+*.db-shm
+*.db-wal
