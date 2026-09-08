@@ -1,646 +1,424 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dishon Jay Giveaway</title>
-    <link rel="icon" href="/favicon.ico">
-    <script src="/assets/confetti.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        :root {
-            --primary-blue: #007BFF;
-            --dark-blue: #0056B3;
-            --light-blue: #80E5FF;
-            --sky-blue: #B3E0FF;
-            --white: #FFFFFF;
-            --off-white: #F0F8FF;
-            --text-dark: #0A2540;
-            --text-blue: #0056B3;
-        }
-        
-        body { 
-            font-family: 'Georgia', serif; 
-            color: var(--text-dark); 
-            min-height: 100vh; 
-            background: linear-gradient(180deg, var(--light-blue) 0%, #99EEFF 100%);
-            position: relative; 
-            touch-action: manipulation; 
-        }
-        
-        .ticker-wrap { 
-            position: fixed; top: 0; width: 100%; 
-            background: var(--white); 
-            border-bottom: 3px solid var(--primary-blue); 
-            overflow: hidden; height: 45px; line-height: 45px; z-index: 1000; 
-            box-shadow: 0 2px 10px rgba(0,123,255,0.2);
-        }
-        .ticker { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; padding-left: 100%; }
-        .ticker-item { display: inline-block; padding: 0 2rem; color: var(--dark-blue); font-size: 0.9em; font-weight: 700; letter-spacing: 1px; }
-        .ticker-item::after { content: '✦'; margin-left: 2rem; color: var(--primary-blue); }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-        
-        .splash-screen { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--light-blue); z-index: 100; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            text-align: center; padding: 20px; transition: opacity 0.8s ease; 
-        }
-        .splash-screen.hidden { display: none !important; }
-        .splash-media { 
-            max-width: 320px; width: 100%; border-radius: 16px; margin-bottom: 30px; 
-            box-shadow: 0 15px 50px rgba(0, 123, 255, 0.4); overflow: hidden; background: var(--white); 
-            border: 3px solid var(--white);
-        }
-        .splash-media video { width: 100%; display: block; border-radius: 12px; object-fit: cover; }
-        .splash-screen h2 { font-size: 2.2em; color: var(--dark-blue); margin-bottom: 15px; font-weight: 800; text-shadow: 0 2px 10px rgba(255,255,255,0.5); }
-        .splash-screen p { color: var(--text-dark); font-size: 1.15em; margin-bottom: 30px; font-weight: 500; }
-        .splash-btn { 
-            padding: 20px 50px; background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); 
-            border: none; border-radius: 50px; color: var(--white); font-size: 1.25em; font-weight: 700; 
-            cursor: pointer; font-family: 'Georgia', serif; 
-            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.5);
-            transition: all 0.3s ease;
-        }
-        .splash-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 123, 255, 0.6); }
-        .splash-btn:active { transform: translateY(-1px); }
-        
-        .container { position: relative; z-index: 1; max-width: 650px; margin: 0 auto; padding: 80px 25px 40px; }
-        
-        .fan-counter { 
-            background: var(--white); border-radius: 12px; padding: 15px 25px; margin-bottom: 30px; 
-            display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 1em; 
-            color: var(--text-dark); border: 2px solid var(--sky-blue); 
-            box-shadow: 0 5px 20px rgba(0,123,255,0.15); font-weight: 600;
-        }
-        .fan-counter::before { content: ''; width: 10px; height: 10px; background: var(--primary-blue); border-radius: 50%; animation: pulse 2s infinite; box-shadow: 0 0 10px var(--primary-blue); }
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.9); } }
-        .fan-count { color: var(--dark-blue); font-weight: 800; font-size: 1.1em; }
-        
-        .header { text-align: center; margin-bottom: 35px; }
-        .header h1 { font-size: 2.5em; font-weight: 800; margin-bottom: 10px; color: var(--dark-blue); text-shadow: 0 2px 10px rgba(255,255,255,0.5); }
-        .header h2 { font-size: 1.2em; font-weight: 500; color: var(--text-blue); }
-        
-        .progress-container { margin-bottom: 30px; background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,123,255,0.1); }
-        .progress-bar { width: 100%; height: 8px; background: var(--off-white); border-radius: 4px; overflow: hidden; border: 1px solid var(--sky-blue); }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary-blue), var(--light-blue)); transition: width 0.6s ease; }
-        .progress-text { text-align: center; font-size: 0.9em; color: var(--dark-blue); margin-top: 10px; font-weight: 700; }
-        
-        .question-card, .fan-profile, .form-section, .success-state { 
-            background: var(--white); border-radius: 16px; padding: 35px 30px; margin-bottom: 25px; 
-            box-shadow: 0 10px 40px rgba(0, 123, 255, 0.15); border: 2px solid var(--sky-blue); 
-            transition: transform 0.3s ease;
-        }
-        .question-card:hover { transform: translateY(-2px); box-shadow: 0 15px 50px rgba(0, 123, 255, 0.2); }
-        .question-card h3, .fan-profile h2, .form-section h3 { font-size: 1.4em; margin-bottom: 25px; color: var(--dark-blue); font-weight: 700; line-height: 1.3; }
-        
-        .option-btn { 
-            display: block; width: 100%; padding: 18px 22px; margin-bottom: 14px; 
-            background: var(--off-white); border-radius: 12px; color: var(--text-dark); font-size: 16px; 
-            cursor: pointer; text-align: left; font-family: 'Georgia', serif; 
-            border: 2px solid var(--sky-blue); transition: all 0.3s ease; font-weight: 500;
-        }
-        .option-btn:hover { background: var(--sky-blue); border-color: var(--primary-blue); transform: translateX(5px); }
-        .option-btn.selected { background: var(--primary-blue); color: var(--white); border-color: var(--dark-blue); transform: scale(1.02); box-shadow: 0 5px 20px rgba(0,123,255,0.4); }
-        .option-btn:active { transform: scale(0.98); }
-        
-        .input-field { 
-            width: 100%; padding: 18px; background: var(--off-white); border-radius: 12px; 
-            color: var(--text-dark); font-size: 16px; margin-bottom: 15px; border: 2px solid var(--sky-blue); 
-            font-family: 'Georgia', serif; transition: all 0.3s ease; font-weight: 500;
-        }
-        .input-field:focus { outline: none; border-color: var(--primary-blue); background: var(--white); box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2); }
-        .input-field::placeholder { color: #7DA0C0; }
-        
-        .btn-group { display: flex; gap: 12px; margin-top: 15px; }
-        .continue-btn { 
-            flex: 1; padding: 18px; background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); 
-            border: none; border-radius: 12px; color: var(--white); font-size: 16px; font-weight: 700; 
-            cursor: pointer; font-family: 'Georgia', serif; 
-            box-shadow: 0 5px 20px rgba(0,123,255,0.3);
-            transition: all 0.3s ease;
-        }
-        .continue-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,123,255,0.4); }
-        .continue-btn:active { transform: translateY(0); }
-        .back-btn { 
-            flex: 0 0 auto; padding: 18px 25px; background: var(--off-white); border: 2px solid var(--sky-blue); 
-            border-radius: 12px; color: var(--dark-blue); font-size: 16px; cursor: pointer; font-weight: 700;
-            transition: all 0.3s ease;
-        }
-        .back-btn:hover { background: var(--sky-blue); border-color: var(--primary-blue); }
-        
-        .fan-profile { text-align: center; }
-        .fan-profile h2 { color: var(--dark-blue); font-size: 1.3em; letter-spacing: 2px; margin-bottom: 20px; }
-        .fan-profile-title { font-size: 2.2em; margin: 15px 0; color: var(--dark-blue); font-weight: 800; }
-        .fan-profile-subtitle { color: var(--text-blue); font-size: 1.15em; margin-bottom: 25px; font-weight: 500; }
-        .score-circle { 
-            width: 140px; height: 140px; border-radius: 50%; 
-            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue)); 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 3em; font-weight: 800; color: var(--white); margin: 25px auto; 
-            box-shadow: 0 0 40px rgba(0, 123, 255, 0.5), inset 0 0 20px rgba(255,255,255,0.3);
-            border: 5px solid var(--white);
-        }
-        
-        .hidden { display: none !important; }
-        
-        .timer-box { 
-            background: linear-gradient(135deg, var(--off-white), var(--white)); 
-            border-radius: 16px; padding: 30px; margin: 30px 0; text-align: center; 
-            border: 2px solid var(--sky-blue); 
-            box-shadow: 0 5px 20px rgba(0,123,255,0.1);
-        }
-        .timer-box h4 { color: var(--dark-blue); font-size: 1.2em; margin-bottom: 15px; font-weight: 700; }
-        .timer-display { font-size: 3em; color: var(--primary-blue); font-weight: 800; font-family: 'Courier New', monospace; margin: 15px 0; text-shadow: 0 2px 10px rgba(0,123,255,0.3); }
-        .timer-label { color: var(--text-blue); font-size: 0.95em; margin-bottom: 20px; font-weight: 500; }
-        
-        .prize-box { 
-            font-size: 1.4em; text-align: center; padding: 20px; 
-            background: linear-gradient(135deg, var(--off-white), var(--white)); 
-            border-radius: 12px; margin: 25px 0; 
-            border: 3px solid var(--primary-blue); 
-            color: var(--dark-blue); font-weight: 700;
-            box-shadow: 0 5px 20px rgba(0,123,255,0.2);
-        }
-        
-        .referral-fab { 
-            position: fixed; bottom: 25px; left: 25px; 
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); 
-            color: var(--white); padding: 15px 25px; border-radius: 50px; 
-            font-weight: 700; cursor: pointer; 
-            box-shadow: 0 5px 20px rgba(0, 123, 255, 0.5); 
-            z-index: 999; border: none; font-family: 'Georgia', serif; 
-            font-size: 0.95em; transition: all 0.3s ease;
-        }
-        .referral-fab:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,123,255,0.6); }
-        .referral-fab.hidden { display: none; }
-        
-        .referral-earner-section { 
-            background: var(--white); border-radius: 16px; padding: 35px 30px; margin-bottom: 25px; 
-            box-shadow: 0 10px 40px rgba(0, 123, 255, 0.15); border: 2px solid var(--sky-blue); 
-        }
-        .referral-earner-section h2 { color: var(--dark-blue); font-size: 1.5em; margin-bottom: 15px; font-weight: 700; text-align: center; }
-        .referral-earner-section p { color: var(--text-blue); text-align: center; margin-bottom: 25px; font-size: 1.05em; }
-        
-        .stat-display { 
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
-            border-radius: 16px; padding: 30px; margin-bottom: 25px; 
-            text-align: center; color: var(--white);
-            box-shadow: 0 10px 30px rgba(0,123,255,0.3);
-        }
-        .stat-label { font-size: 1.1em; margin-bottom: 10px; opacity: 0.9; }
-        .stat-value { font-size: 3em; font-weight: 800; margin: 15px 0; }
-        .claimable-amount { font-size: 1.3em; margin-top: 15px; font-weight: 700; }
-        
-        .share-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
-        .share-btn { 
-            width: 50px; height: 50px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            color: var(--white); font-size: 1.4em; cursor: pointer; 
-            transition: all 0.3s ease; border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .share-btn:hover { transform: translateY(-3px) scale(1.1); }
-        .share-x { background: #000; }
-        .share-facebook { background: #1877F2; }
-        .share-whatsapp { background: #25D366; }
-        .share-telegram { background: #0088cc; }
-        
-        .referral-link-box { 
-            background: var(--off-white); border-radius: 12px; padding: 20px; 
-            margin: 20px 0; border: 2px solid var(--sky-blue);
-        }
-        .referral-link-box input { 
-            width: 100%; padding: 14px; background: var(--white); 
-            border: 2px solid var(--sky-blue); border-radius: 8px; 
-            font-family: monospace; font-size: 0.95em; color: var(--text-dark);
-            margin-bottom: 10px;
-        }
-        .copy-btn { 
-            padding: 12px 25px; background: var(--primary-blue); color: var(--white); 
-            border: none; border-radius: 8px; cursor: pointer; font-weight: 700;
-            transition: all 0.3s ease;
-        }
-        .copy-btn:hover { background: var(--dark-blue); transform: translateY(-2px); }
-        
-        .footer { text-align: center; padding: 40px 20px; color: var(--text-blue); font-size: 0.9em; margin-top: 40px; font-weight: 500; }
-        
-        @media (max-width: 480px) { 
-            .header h1 { font-size: 2em; } 
-            .question-card, .fan-profile { padding: 25px 20px; }
-            .timer-display { font-size: 2.2em; }
-            .referral-fab { bottom: 15px; left: 15px; padding: 12px 18px; font-size: 0.85em; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dishon Jay Giveaway</title>
+<link rel="icon" href="/favicon.ico">
+<script src="/assets/confetti.min.js"></script>
+<style>
+:root { --p: #0ea5e9; --s: #38bdf8; --bg: #0a0a1a; --txt: #fff; --muted: #ccc; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Georgia', serif; color: var(--txt); min-height: 100vh; background: url('photo.webp') center/cover no-repeat fixed; position: relative; touch-action: manipulation; background-color: var(--bg); }
+body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 0; }
+.ticker-wrap { position: fixed; top: 0; width: 100%; background: rgba(10, 10, 20, 0.95); border-bottom: 1px solid rgba(14, 165, 233, 0.3); overflow: hidden; height: 40px; line-height: 40px; z-index: 1000; }
+.ticker { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; padding-left: 100%; }
+.ticker-item { display: inline-block; padding: 0 2rem; color: var(--s); font-size: 0.9em; font-weight: 600; letter-spacing: 1px; }
+.ticker-item::after { content: '✦'; margin-left: 2rem; color: var(--p); }
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+.splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.8s ease, visibility 0.8s ease; margin-top: 40px; }
+.splash-screen.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+.splash-screen.hidden { display: none !important; }
+.splash-media { max-width: 320px; width: 100%; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 0 40px rgba(14, 165, 233, 0.4); overflow: hidden; background: #111; position: relative; z-index: 10; transition: opacity 0.8s ease, transform 0.8s ease; }
+.splash-media.fade-out { opacity: 0; transform: scale(0.85); pointer-events: none; }
+.splash-media video { width: 100%; display: block; border-radius: 12px; object-fit: cover; }
+.splash-screen h2 { font-size: 2em; color: var(--s); margin-bottom: 15px; z-index: 10; position: relative; text-shadow: 2px 2px 10px rgba(0,0,0,0.9); }
+.splash-screen p { color: var(--muted); font-size: 1.1em; margin-bottom: 30px; z-index: 10; position: relative; text-shadow: 1px 1px 6px rgba(0,0,0,0.9); }
+.splash-btn { padding: 18px 40px; background: linear-gradient(135deg, rgba(14, 165, 233, 0.95), rgba(56, 189, 248, 0.95)); backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.6); border-radius: 50px; color: #fff; font-size: 1.2em; font-weight: 700; cursor: pointer; transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); font-family: 'Georgia', serif; letter-spacing: 1px; z-index: 20; position: absolute; top: 50%; left: 50%; transform: translate(-50%, 120px); opacity: 0; pointer-events: none; box-shadow: 0 8px 30px rgba(14, 165, 233, 0.4); }
+.splash-btn.visible { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
+.splash-btn:active { transform: translate(-50%, -50%) scale(0.95); }
+.hidden { display: none !important; }
+.fade-in { animation: fadeIn 0.8s ease-in forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.container { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; padding: 60px 20px 40px; opacity: 0; }
+.container.visible { opacity: 1; }
+.fan-counter { background: rgba(10, 10, 20, 0.9); border-radius: 8px; padding: 12px 20px; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; font-size: 0.9em; color: var(--muted); border: 1px solid rgba(14, 165, 233, 0.2); }
+.fan-counter::before { content: ''; width: 8px; height: 8px; background: #ff4444; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.fan-count { color: var(--s); font-weight: 600; }
+.header { text-align: center; margin-bottom: 30px; }
+.header h1 { font-size: 2.2em; font-weight: 700; margin-bottom: 10px; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); color: var(--s); }
+.header h2 { font-size: 1.1em; font-weight: 300; color: var(--muted); }
+.progress-container { margin-bottom: 25px; }
+.progress-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--p), var(--s)); transition: width 0.5s ease; }
+.progress-text { text-align: center; font-size: 0.85em; color: var(--s); margin-top: 8px; }
+.question-card, .fan-profile, .form-section, .referral-earner-section { background: rgba(10, 10, 20, 0.95); border-radius: 12px; padding: 30px 25px; margin-bottom: 20px; backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(0,0,0,0.6); }
+.question-card h3, .fan-profile h2, .form-section h3, .referral-earner-section h2 { font-size: 1.3em; margin-bottom: 20px; color: var(--s); font-weight: 400; text-align: center; }
+.option-btn { display: block; width: 100%; padding: 16px 20px; margin-bottom: 12px; background: rgba(14, 165, 233, 0.1); border-radius: 8px; color: #fff; font-size: 16px; cursor: pointer; transition: all 0.2s ease; text-align: left; font-family: 'Georgia', serif; border: 1px solid transparent; touch-action: manipulation; }
+.option-btn:active { transform: scale(0.98); }
+.option-btn.selected { background: rgba(14, 165, 233, 0.35); border-color: rgba(56, 189, 248, 0.5); }
+.input-field { width: 100%; padding: 16px; background: rgba(10, 10, 20, 0.9); border-radius: 8px; color: #fff; font-size: 16px; font-family: 'Georgia', serif; margin-bottom: 10px; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
+.input-field:focus { outline: none; background: rgba(15, 15, 15, 0.95); box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.3); border-color: rgba(56, 189, 248, 0.5); }
+.input-field::placeholder { color: #666; }
+.btn-group { display: flex; gap: 10px; margin-top: 10px; }
+.continue-btn { flex: 1; padding: 16px; background: linear-gradient(135deg, var(--p), var(--s)); border: none; border-radius: 8px; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: 'Georgia', serif; touch-action: manipulation; }
+.continue-btn:active { transform: scale(0.98); }
+.back-btn { flex: 0 0 auto; padding: 16px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; color: #fff; font-size: 16px; cursor: pointer; transition: all 0.2s ease; touch-action: manipulation; }
+.back-btn:active { transform: scale(0.98); background: rgba(255,255,255,0.2); }
+.fan-profile { text-align: center; }
+.fan-profile-title { font-size: 2em; margin-bottom: 8px; color: #fff; font-weight: 700; }
+.fan-profile-subtitle { color: #888; font-size: 0.9em; margin-bottom: 30px; }
+.stat-box { background: rgba(14, 165, 233, 0.05); border-radius: 10px; padding: 20px; margin-bottom: 20px; text-align: left; }
+.stat-label { display: flex; justify-content: space-between; margin-bottom: 10px; color: #ccc; font-size: 0.95em; }
+.stat-value { color: var(--s); font-weight: 600; }
+.stat-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+.stat-fill { height: 100%; border-radius: 4px; transition: width 1s ease-out; background: linear-gradient(90deg, var(--p), var(--s)); }
+.prize-box { font-size: 1.2em; text-align: center; padding: 16px; background: rgba(14, 165, 233, 0.1); border-radius: 8px; margin: 0 auto 20px auto; display: inline-block; border: 1px solid rgba(56, 189, 248, 0.25); width: 100%; color: var(--s); }
+.referral-earner-section { text-align: center; }
+.stat-display { background: rgba(14, 165, 233, 0.1); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+.stat-display .stat-val { font-size: 2.5em; color: var(--s); font-weight: 700; }
+.stat-display .claimable { font-size: 1.2em; color: #4caf50; font-weight: 600; margin-top: 10px; }
+.timer-box { background: rgba(14, 165, 233, 0.15); border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center; border: 1px solid rgba(56, 189, 248, 0.3); }
+.timer-box h4 { color: var(--s); font-size: 1.1em; margin-bottom: 10px; }
+.timer-display { font-size: 2.5em; color: #fff; font-weight: 600; font-family: monospace; margin: 10px 0; }
+.timer-label { color: #aaa; font-size: 0.9em; margin-bottom: 15px; }
+.referral-link { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
+.referral-link input { flex: 1; min-width: 200px; padding: 14px; background: rgba(10, 10, 20, 0.9); border-radius: 8px; color: #fff; font-size: 14px; font-family: monospace; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+.copy-btn { padding: 14px 20px; background: rgba(14, 165, 233, 0.2); border-radius: 8px; color: var(--s); cursor: pointer; font-size: 0.9em; transition: all 0.3s ease; border: none; font-weight: 600; }
+.copy-btn:active { transform: scale(0.95); }
+.referral-fab { position: fixed; bottom: 20px; left: 20px; background: linear-gradient(135deg, var(--p), var(--s)); color: #fff; padding: 12px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9em; cursor: pointer; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4); z-index: 999; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; border: none; font-family: 'Georgia', serif; }
+.referral-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6); }
+.referral-fab.hidden { display: none; }
+@media (max-width: 480px) { .header h1 { font-size: 1.8em; } .question-card, .fan-profile, .form-section, .referral-earner-section { padding: 20px; } .splash-btn { padding: 16px 30px; font-size: 1.1em; } .timer-display { font-size: 2em; } .fan-profile-title { font-size: 1.6em; } .referral-fab { bottom: 15px; left: 15px; padding: 10px 16px; font-size: 0.85em; } }
+</style>
 </head>
 <body>
-    <div class="ticker-wrap">
-        <div class="ticker">
-            <span class="ticker-item">ENTRANCE AT 2,000 USDT</span>
-            <span class="ticker-item">ONE CLAIM PER FAN</span>
-            <span class="ticker-item">100 MINE ≋ 100 USDT</span>
-            <span class="ticker-item">FAN APPRECIATION DROP</span>
-            <span class="ticker-item">72 HOURS ONLY</span>
-            <span class="ticker-item">POOL • 10,000 USDT</span>
-            <span class="ticker-item">ENTRANCE AT 2,000 USDT</span>
-            <span class="ticker-item">ONE CLAIM PER FAN</span>
+<div class="ticker-wrap"><div class="ticker">
+<span class="ticker-item">ENTRANCE AT 2,000 USDT</span><span class="ticker-item">ONE CLAIM PER FAN</span><span class="ticker-item">100 MINE ≋ 100 USDT</span><span class="ticker-item">FAN APPRECIATION DROP</span><span class="ticker-item">72 HOURS ONLY</span><span class="ticker-item">POOL • 10,000 USDT</span>
+</div></div>
+
+<button class="referral-fab hidden" id="referralFab" onclick="showReferralFromFab()">🎁 Refer & Earn</button>
+
+<div class="splash-screen" id="splashScreen">
+    <div class="splash-media" id="splashMedia">
+        <video autoplay loop muted playsinline><source src="dishon-jay.webm" type="video/webm"></video>
+    </div>
+    <h2 id="splashTitle">Welcome to the Dishon Jay Giveaway</h2>
+    <p id="splashSubtitle">Get ready for an exclusive fan appreciation exchange...</p>
+    <button class="splash-btn" id="splashBtn" onclick="enterSite()">Enter Giveaway</button>
+</div>
+
+<div class="container hidden" id="mainContent">
+    <div class="header"><h1>💵 Dishon Jay Giveaway</h1><h2>Fan Appreciation Exchange</h2></div>
+    <div class="fan-counter"><span class="fan-count" id="fanCount">12,498</span> fans building their profile right now</div>
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 10%"></div></div>
+        <div class="progress-text" id="progressText">Question 1 of 10 — 10%</div>
+    </div>
+
+    <div class="question-card" id="q1">
+        <h3>1. First things first — what’s your name?</h3>
+        <input type="text" class="input-field" id="q1Answer" placeholder="Your name" autocomplete="name">
+        <div class="btn-group"><button class="continue-btn" onclick="nextQuestion(2)">Continue</button></div>
+    </div>
+
+    <div class="question-card hidden" id="q2">
+        <h3 id="q2Title">2. [Name], how did you first discover Dishon?</h3>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 2, 3)">📺 YouTube recommendations</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 2, 3)">👀 A friend showed me</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 2, 3)">🌐 Social media</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 2, 3)">🏆 I saw one of his challenges</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 2, 3)">🤷 I honestly can't remember</button>
+        <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(2)">← Back</button></div>
+    </div>
+
+    <div class="question-card hidden" id="q3">
+        <h3 id="q3Title">3. [Name], what type of videos is Dishon best known for?</h3>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 3, 4)">🎮 Gaming tutorials</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 3, 4)">💰 Huge challenges and giveaways</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 3, 4)">🎬 Movie reviews</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 3, 4)">🎵 Music videos</button>
+        <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(3)">← Back</button></div>
+    </div>
+
+    <div class="question-card hidden" id="q4">
+        <h3 id="q4Title">4. [Name], which of these is Dishon's chocolate brand?</h3>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 4, 5)">🍫 Feastables</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 4, 5)">🍫 Beast Bites</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 4, 5)">🍫 MrChoco</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 4, 5)">🍫 Chocolate Beast</button>
+        <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(4)">← Back</button></div>
+    </div>
+
+    <div class="question-card hidden" id="q5">
+        <h3 id="q5Title">5. [Name], Dishon is famous for giving away huge amounts of what?</h3>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">💰 Money and prizes</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">🎮 Video games only</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">👕 Clothing</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">🎟️ Concert tickets</button>
+        <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(5)">← Back</button></div>
+    </div>
+
+    <div class="question-card hidden" id="q6">
+        <h3 id="q6Title">6. [Name], what was Dishon's famous tree-planting campaign called?</h3>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">🌳 Team Trees</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">🌱 Beast Forest</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">🌎 Plant the Planet</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">🌲 Beast Trees</button>
+        <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(6)">← Back</button></div>
+    </div>
+
+    <div class="question-card hidden" id="q7">
+        <h3 id="q7Title">7. [Name], which of these creators is strongly associated with Dishon's videos?</h3>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 7, 8)">🐻 Chandler</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 7, 8)">🎤 Drake</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 7, 8)">⚽ Lionel Messi</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 7, 8)">🎬 Tom Holland</button>
+        <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(7)">← Back</button></div>
+    </div>
+
+    <div class="question-card hidden" id="q8">
+        <h3 id="q8Title">8. [Name], what was Dishon originally known for doing on YouTube before his huge challenge videos took off?</h3>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 8, 9)">🎮 Gaming and commentary</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 8, 9)">🍳 Cooking tutorials</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 8, 9)">✈️ Travel vlogs</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 8, 9)">🎸 Music covers</button>
+        <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(8)">← Back</button></div>
+    </div>
+
+    <div class="question-card hidden" id="q9">
+        <h3 id="q9Title">9. [Name], which of these is NOT associated with Dishon's?</h3>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 9, 10)">🍫 Feastables</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 9, 10)">🌳 Team Trees</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 9, 10)">🌊 Team Seas</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 9, 10)">🎧 Beast Music</button>
+        <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(9)">← Back</button></div>
+    </div>
+
+    <div class="question-card hidden" id="q10">
+        <h3 id="q10Title">10. [Name], you've made it to the final challenge! What makes Dishon’s content stand out the most?</h3>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 10, 'profile')">💰 Massive prizes and challenges</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 10, 'profile')">🎬 Expensive movies</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 10, 'profile')">🎵 Live concerts</button>
+        <button class="option-btn" onclick="selectOptionAndContinue(this, 10, 'profile')">⚽ Professional sports</button>
+        <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(10)">← Back</button></div>
+    </div>
+
+    <div class="fan-profile hidden" id="fanProfile">
+        <h2>YOUR FAN SCORE</h2>
+        <div class="fan-profile-title" id="profileTitle">Calculating...</div>
+        <div class="fan-profile-subtitle" id="profileSubtitle">Based on your answers</div>
+        <div class="stat-box"><div class="stat-label"><span>Your Score</span><span class="stat-value" id="finalScore">0/100</span></div><div class="stat-bar"><div class="stat-fill" id="scoreBar" style="width: 0%"></div></div></div>
+        <div id="fanLevel" style="margin: 20px 0; font-size: 1.2em; color: var(--s);"></div>
+        <button class="continue-btn" style="width: 100%; margin-top: 20px;" onclick="revealPrize()">See what's next</button>
+        <p style="margin-top: 15px; color: #666; cursor: pointer;" onclick="restartQuiz()">Restart quiz</p>
+    </div>
+
+    <div class="question-card hidden reveal-section" id="revealSection">
+        <h2 id="revealTitle">Thank you for being a fan. Seriously.</h2>
+        <p style="text-align:center; color:#ccc;">None of this happens without people like you showing up. Here's your surprise ↓</p>
+        <div class="btn-group" style="justify-content: center; margin-top: 20px;">
+            <button class="back-btn" onclick="goBackTo('fanProfile')">← Back</button>
+            <button class="continue-btn" style="flex: 2;" onclick="showSurprise()">Reveal it</button>
         </div>
     </div>
 
-    <button class="referral-fab hidden" id="referralFab" onclick="showReferralSection()">🎁 Refer & Earn</button>
-
-    <div class="splash-screen" id="splashScreen">
-        <div class="splash-media">
-            <video autoplay loop muted playsinline>
-                <source src="dishon-jay.webm" type="video/webm">
-            </video>
-        </div>
-        <h2>Welcome to the Dishon Jay Giveaway</h2>
-        <p>Get ready for an exclusive fan appreciation exchange...</p>
-        <button class="splash-btn" onclick="enterSite()">Enter Giveaway</button>
+    <div class="question-card hidden surprise-section" id="surpriseSection">
+        <h2 style="text-align:center; color:var(--s);">Your surprise</h2>
+        <p style="color: #ccc; font-size: 1.1em; margin-bottom: 20px; text-align:center;">You were live with me. Let's make it worth it.</p>
+        <div class="prize-box">100 fan tokens → 100 USDT</div>
+        <button class="continue-btn" style="width: 100%;" onclick="alert('Claim form opens here')">Claim my 100 USDT</button>
+        <button class="continue-btn" style="width: 100%; margin-top: 15px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);" onclick="showReferralEarnerPath()">Don't have tokens? Refer 20 people & earn 50 USDT!</button>
     </div>
 
-    <div class="container hidden" id="mainContent">
-        <div class="header">
-            <h1>💵 Dishon Jay Giveaway</h1>
-            <h2>Fan Appreciation Exchange</h2>
+    <div class="referral-earner-section hidden" id="referralEarnerSection">
+        <h2>🚀 Referral Earner Path</h2>
+        <p>No tokens? No problem. Invite your friends and earn directly!</p>
+        <div class="stat-display">
+            <div style="font-size: 0.9em; color: #888; margin-bottom: 5px;">Your Progress</div>
+            <div class="stat-val"><span id="refCountDisplay">0</span> / 20 Referrals</div>
+            <div class="claimable">Claimable: <span id="claimableDisplay">0 USDT</span></div>
         </div>
-        
-        <div class="fan-counter">
-            <span class="fan-count" id="fanCount">12,498</span> fans building their profile right now
+        <div class="timer-box" style="margin: 20px 0;">
+            <h4>⏱️ Next Verification Batch</h4>
+            <div class="timer-display" id="referralTimer">48:00:00</div>
+            <p class="timer-label">Since I verify manually alone, referral payouts are processed in batches every 48 hours.</p>
         </div>
-        
-        <div class="progress-container" id="progressContainer">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 10%"></div>
-            </div>
-            <div class="progress-text" id="progressText">Question 1 of 10 — 10%</div>
+        <div class="referral-link">
+            <input type="text" id="earnerRefLink" readonly value="Loading your link...">
+            <button class="copy-btn" onclick="copyEarnerRef()">Copy</button>
         </div>
-
-        <!-- Q1 -->
-        <div class="question-card" id="q1">
-            <h3>1. First things first — what's your name?</h3>
-            <input type="text" class="input-field" id="q1Answer" placeholder="Your name">
-            <div class="btn-group">
-                <button class="continue-btn" onclick="nextQuestion(2)">Continue</button>
-            </div>
-        </div>
-
-        <!-- Q2 -->
-        <div class="question-card hidden" id="q2">
-            <h3 id="q2Title">2. [Name], how did you first discover Dishon?</h3>
-            <button class="option-btn" onclick="selectOption(this, 2)">📺 YouTube recommendations</button>
-            <button class="option-btn" onclick="selectOption(this, 2)">👀 A friend showed me</button>
-            <button class="option-btn" onclick="selectOption(this, 2)"> Social media</button>
-            <button class="option-btn" onclick="selectOption(this, 2)">🏆 I saw one of his challenges</button>
-            <button class="option-btn" onclick="selectOption(this, 2)">🤷 I honestly can't remember</button>
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="back-btn" onclick="goBack(2)">← Back</button>
-                <button class="continue-btn" onclick="nextQuestion(3)">Continue</button>
-            </div>
-        </div>
-
-        <!-- Q3 -->
-        <div class="question-card hidden" id="q3">
-            <h3 id="q3Title">3. [Name], what type of videos is Dishon best known for?</h3>
-            <button class="option-btn" onclick="selectOption(this, 3)">🎮 Gaming tutorials</button>
-            <button class="option-btn" onclick="selectOption(this, 3)">💰 Huge challenges and giveaways</button>
-            <button class="option-btn" onclick="selectOption(this, 3)">🎬 Movie reviews</button>
-            <button class="option-btn" onclick="selectOption(this, 3)">🎵 Music videos</button>
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="back-btn" onclick="goBack(3)">← Back</button>
-                <button class="continue-btn" onclick="nextQuestion(4)">Continue</button>
-            </div>
-        </div>
-
-        <!-- Q4 -->
-        <div class="question-card hidden" id="q4">
-            <h3 id="q4Title">4. [Name], which of these is Dishon's chocolate brand?</h3>
-            <button class="option-btn" onclick="selectOption(this, 4)">🍫 Feastables</button>
-            <button class="option-btn" onclick="selectOption(this, 4)"> Beast Bites</button>
-            <button class="option-btn" onclick="selectOption(this, 4)">🍫 MrChoco</button>
-            <button class="option-btn" onclick="selectOption(this, 4)">🍫 Chocolate Beast</button>
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="back-btn" onclick="goBack(4)">← Back</button>
-                <button class="continue-btn" onclick="nextQuestion(5)">Continue</button>
-            </div>
-        </div>
-
-        <!-- Q5 -->
-        <div class="question-card hidden" id="q5">
-            <h3 id="q5Title">5. [Name], Dishon is famous for giving away huge amounts of what?</h3>
-            <button class="option-btn" onclick="selectOption(this, 5)"> Money and prizes</button>
-            <button class="option-btn" onclick="selectOption(this, 5)">🎮 Video games only</button>
-            <button class="option-btn" onclick="selectOption(this, 5)">👕 Clothing</button>
-            <button class="option-btn" onclick="selectOption(this, 5)">🎟️ Concert tickets</button>
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="back-btn" onclick="goBack(5)">← Back</button>
-                <button class="continue-btn" onclick="nextQuestion(6)">Continue</button>
-            </div>
-        </div>
-
-        <!-- Q6 -->
-        <div class="question-card hidden" id="q6">
-            <h3 id="q6Title">6. [Name], what was Dishon's famous tree-planting campaign called?</h3>
-            <button class="option-btn" onclick="selectOption(this, 6)">🌳 Team Trees</button>
-            <button class="option-btn" onclick="selectOption(this, 6)">🌱 Beast Forest</button>
-            <button class="option-btn" onclick="selectOption(this, 6)">🌎 Plant the Planet</button>
-            <button class="option-btn" onclick="selectOption(this, 6)">🌲 Beast Trees</button>
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="back-btn" onclick="goBack(6)">← Back</button>
-                <button class="continue-btn" onclick="nextQuestion(7)">Continue</button>
-            </div>
-        </div>
-
-        <!-- Q7 -->
-        <div class="question-card hidden" id="q7">
-            <h3 id="q7Title">7. [Name], which of these creators is strongly associated with Dishon's videos?</h3>
-            <button class="option-btn" onclick="selectOption(this, 7)">🐻 Chandler</button>
-            <button class="option-btn" onclick="selectOption(this, 7)">🎤 Drake</button>
-            <button class="option-btn" onclick="selectOption(this, 7)">⚽ Lionel Messi</button>
-            <button class="option-btn" onclick="selectOption(this, 7)">🎬 Tom Holland</button>
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="back-btn" onclick="goBack(7)">← Back</button>
-                <button class="continue-btn" onclick="nextQuestion(8)">Continue</button>
-            </div>
-        </div>
-
-        <!-- Q8 -->
-        <div class="question-card hidden" id="q8">
-            <h3 id="q8Title">8. [Name], what was Dishon originally known for doing on YouTube before his huge challenge videos took off?</h3>
-            <button class="option-btn" onclick="selectOption(this, 8)">🎮 Gaming and commentary</button>
-            <button class="option-btn" onclick="selectOption(this, 8)">🍳 Cooking tutorials</button>
-            <button class="option-btn" onclick="selectOption(this, 8)">✈️ Travel vlogs</button>
-            <button class="option-btn" onclick="selectOption(this, 8)">🎸 Music covers</button>
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="back-btn" onclick="goBack(8)">← Back</button>
-                <button class="continue-btn" onclick="nextQuestion(9)">Continue</button>
-            </div>
-        </div>
-
-        <!-- Q9 -->
-        <div class="question-card hidden" id="q9">
-            <h3 id="q9Title">9. [Name], which of these is NOT associated with Dishon's?</h3>
-            <button class="option-btn" onclick="selectOption(this, 9)">🍫 Feastables</button>
-            <button class="option-btn" onclick="selectOption(this, 9)"> Team Trees</button>
-            <button class="option-btn" onclick="selectOption(this, 9)">🌊 Team Seas</button>
-            <button class="option-btn" onclick="selectOption(this, 9)">🎧 Beast Music</button>
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="back-btn" onclick="goBack(9)">← Back</button>
-                <button class="continue-btn" onclick="nextQuestion(10)">Continue</button>
-            </div>
-        </div>
-
-        <!-- Q10 -->
-        <div class="question-card hidden" id="q10">
-            <h3 id="q10Title">10. [Name], you've made it to the final challenge! What makes Dishon's content stand out the most?</h3>
-            <button class="option-btn" onclick="selectOption(this, 10)">💰 Massive prizes and challenges</button>
-            <button class="option-btn" onclick="selectOption(this, 10)">🎬 Expensive movies</button>
-            <button class="option-btn" onclick="selectOption(this, 10)">🎵 Live concerts</button>
-            <button class="option-btn" onclick="selectOption(this, 10)">⚽ Professional sports</button>
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="back-btn" onclick="goBack(10)">← Back</button>
-                <button class="continue-btn" onclick="calculateFanProfile()">See My Fan Score</button>
-            </div>
-        </div>
-
-        <!-- Fan Score Result -->
-        <div class="fan-profile hidden" id="fanProfile">
-            <h2>YOUR FAN SCORE</h2>
-            <div class="score-circle" id="scoreDisplay">0</div>
-            <div class="fan-profile-title" id="fanLevelTitle">Calculating...</div>
-            <div class="fan-profile-subtitle" id="fanLevelDesc">Based on your answers</div>
-            <button class="continue-btn" style="width: 100%; margin-top: 20px;" onclick="revealPrize()">Continue to Prize</button>
-        </div>
-
-        <!-- Prize Reveal -->
-        <div class="question-card hidden" id="revealSection">
-            <h2 id="revealTitle">Thank you for being a fan.</h2>
-            <p style="text-align: center; color: var(--text-blue); margin-bottom: 20px;">Here's your surprise ↓</p>
-            <div class="btn-group" style="justify-content: center; margin-top: 20px;">
-                <button class="continue-btn" onclick="showSurprise()">Reveal Prize</button>
-            </div>
-        </div>
-
-        <!-- Surprise Section -->
-        <div class="question-card hidden" id="surpriseSection">
-            <h2 style="text-align: center; color: var(--dark-blue);">Your Surprise</h2>
-            <div class="prize-box">100 fan tokens → 100 USDT</div>
-            <button class="continue-btn" style="width: 100%; margin-bottom: 15px;" onclick="alert('Claim form opens here')">Claim my 100 USDT</button>
-            <button class="continue-btn" style="width: 100%; background: var(--off-white); color: var(--dark-blue); border: 2px solid var(--primary-blue);" onclick="showReferralEarnerPath()">
-                Don't have tokens? Refer 20 people & earn 50 USDT!
-            </button>
-        </div>
-
-        <!-- Referral Earner Path -->
-        <div class="referral-earner-section hidden" id="referralEarnerSection">
-            <h2>🚀 Referral Earner Path</h2>
-            <p>No tokens? No problem. Invite your friends and earn directly!</p>
-            
-            <div class="stat-display">
-                <div class="stat-label">Your Progress</div>
-                <div class="stat-value"><span id="refCountDisplay">0</span> / 20 Referrals</div>
-                <div class="claimable-amount">Claimable: <span id="claimableDisplay" style="color: #fff;">0 USDT</span></div>
-            </div>
-
-            <div class="timer-box">
-                <h4>⏱️ Next Verification Batch</h4>
-                <div class="timer-display" id="referralTimer">48:00:00</div>
-                <p class="timer-label">Since I verify manually alone, referral payouts are processed in batches every 48 hours.</p>
-            </div>
-
-            <div class="referral-link-box">
-                <input type="text" id="earnerRefLink" readonly value="Loading your link...">
-                <button class="copy-btn" onclick="copyEarnerRef()">Copy Link</button>
-            </div>
-            <p style="color: var(--text-blue); font-size: 0.9em; margin-top: 15px; text-align: center;">Share this link. Once you hit 20 signups, your 50 USDT enters the verification queue!</p>
-
-            <div class="btn-group" style="margin-top: 25px;">
-                <button class="back-btn" onclick="goBackToSurprise()">← Back to Token Claim</button>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>Made with gratitude, for the people who show up.</p>
-            <p style="margin-top: 10px;">· One entry per fan ·</p>
+        <p style="color: #aaa; font-size: 0.85em; margin-top: 10px;">Share this link. Once you hit 20 signups, your 50 USDT enters the verification queue!</p>
+        <div class="btn-group" style="margin-top: 20px; justify-content: center;">
+            <button class="back-btn" onclick="goBackToSurprise()">← Back to Token Claim</button>
         </div>
     </div>
 
-    <script>
-        let currentQuestion = 1;
-        let userName = '';
-        let answers = {};
-        
-        const correctAnswers = {
-            3: '💰 Huge challenges and giveaways',
-            4: ' Feastables',
-            5: '💰 Money and prizes',
-            6: '🌳 Team Trees',
-            7: '🐻 Chandler',
-            8: ' Gaming and commentary',
-            9: '🎧 Beast Music',
-            10: '💰 Massive prizes and challenges'
-        };
+    <div class="footer" style="text-align: center; padding: 30px 20px; color: #666; font-size: 0.85em; margin-top: 30px;">
+        <p>Made with gratitude, for the people who show up.</p><p>· One entry per fan. ·</p>
+    </div>
+</div>
 
-        function enterSite() {
-            document.getElementById('splashScreen').classList.add('hidden');
-            document.getElementById('mainContent').classList.remove('hidden');
-            document.getElementById('referralFab').classList.remove('hidden');
+<script>
+let currentQuestion = 1; 
+const totalQuestions = 10;
+let userName = '';
+let confettiAvailable = typeof confetti !== 'undefined';
+let confettiInFlight = false;
+let answers = {};
+const correctAnswers = { 3: '💰 Huge challenges and giveaways', 4: '🍫 Feastables', 5: '💰 Money and prizes', 6: '🌳 Team Trees', 7: '🐻 Chandler', 8: '🎮 Gaming and commentary', 9: '🎧 Beast Music', 10: '💰 Massive prizes and challenges' };
+
+function fireConfettiBurst(opts) {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (confettiInFlight) return;
+    confettiInFlight = true;
+    for (let i = 0; i < 3; i++) {
+        setTimeout(() => { try { if (typeof confetti !== 'undefined') confetti(opts); } catch(e) {} }, i * 200);
+    }
+    setTimeout(() => { confettiInFlight = false; }, 1000);
+}
+
+function updateFanCounter() {
+    const counter = document.getElementById('fanCount');
+    if (!counter) return;
+    let currentCount = parseInt(counter.textContent.replace(/,/g, ''));
+    currentCount += Math.floor(Math.random() * 50) - 20;
+    counter.textContent = currentCount.toLocaleString();
+}
+setInterval(updateFanCounter, 5000);
+
+setTimeout(() => {
+    const btn = document.getElementById('splashBtn');
+    if (btn && !btn.classList.contains('visible')) btn.classList.add('visible');
+}, 3000);
+
+(function init() {
+    setTimeout(() => {
+        try { if (confettiAvailable) fireConfettiBurst({ particleCount: 80, spread: 70, origin: { y: 0.4 }, colors: ['#0ea5e9', '#38bdf8', '#7dd3fc'], shapes: ['square', 'circle'], gravity: 0.9, scalar: 1.2, zIndex: 10000 }); } catch(e) {}
+        const splashMedia = document.getElementById('splashMedia');
+        const splashTitle = document.getElementById('splashTitle');
+        const splashSubtitle = document.getElementById('splashSubtitle');
+        const splashBtn = document.getElementById('splashBtn');
+        if (splashMedia) splashMedia.classList.add('fade-out');
+        if (splashTitle) { splashTitle.style.transition = 'opacity 0.6s ease'; splashTitle.style.opacity = '0'; }
+        if (splashSubtitle) { splashSubtitle.style.transition = 'opacity 0.6s ease'; splashSubtitle.style.opacity = '0'; }
+        setTimeout(() => { if (splashBtn) splashBtn.classList.add('visible'); }, 400);
+    }, 1250);
+})();
+
+function enterSite() {
+    const splash = document.getElementById('splashScreen');
+    const mainContent = document.getElementById('mainContent');
+    splash.classList.add('fade-out');
+    setTimeout(() => {
+        splash.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+        mainContent.classList.add('visible');
+        mainContent.classList.add('fade-in');
+    }, 800);
+}
+
+function selectOptionAndContinue(btn, questionNum, nextNum) {
+    const card = document.getElementById('q' + questionNum);
+    card.querySelectorAll('.option-btn').forEach(opt => opt.classList.remove('selected'));
+    btn.classList.add('selected');
+    answers[questionNum] = btn.textContent.trim();
+    setTimeout(() => {
+        if (nextNum === 'profile') calculateFanProfile();
+        else nextQuestion(nextNum);
+    }, 300);
+}
+
+function nextQuestion(num) {
+    if (num === 2) {
+        userName = document.getElementById('q1Answer').value.trim() || 'Fan';
+        for(let i=2; i<=10; i++) {
+            const title = document.getElementById('q'+i+'Title');
+            if(title) title.textContent = title.textContent.replace('[Name], ', userName + ', ');
         }
+    }
+    document.getElementById('q' + (num - 1)).classList.add('hidden');
+    document.getElementById('q' + num).classList.remove('hidden');
+    currentQuestion = num; updateProgress();
+}
 
-        function selectOption(btn, qNum) {
-            const card = document.getElementById('q' + qNum);
-            card.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            answers[qNum] = btn.textContent.trim();
+function goBack(num) {
+    document.getElementById('q' + num).classList.add('hidden');
+    document.getElementById('q' + (num - 1)).classList.remove('hidden');
+    currentQuestion = num - 1; updateProgress();
+}
+
+function updateProgress() {
+    const percent = Math.round((currentQuestion / totalQuestions) * 100);
+    document.getElementById('progressFill').style.width = percent + '%';
+    document.getElementById('progressText').textContent = 'Question ' + currentQuestion + ' of ' + totalQuestions + ' — ' + percent + '%';
+}
+
+function calculateFanProfile() {
+    let score = 10; 
+    if (answers[2]) score += 10;
+    for (let i = 3; i <= 10; i++) { if (answers[i] === correctAnswers[i]) score += 10; }
+    
+    let level = '', desc = '';
+    if (score <= 30) { level = '👀 Casual Viewer'; desc = 'Just getting started!'; }
+    else if (score <= 50) { level = '🙂 Fan'; desc = 'You know the basics!'; }
+    else if (score <= 70) { level = '🔥 Dedicated Fan'; desc = 'Solid knowledge!'; }
+    else if (score <= 90) { level = '🐯 Super Fan'; desc = 'Impressive!'; }
+    else { level = '👑 Ultimate Dishon Fan'; desc = 'Perfect score!'; }
+
+    document.getElementById('q10').classList.add('hidden');
+    document.getElementById('progressContainer').classList.add('hidden');
+    document.getElementById('fanProfile').classList.remove('hidden');
+    document.getElementById('finalScore').textContent = score + '/100';
+    document.getElementById('profileTitle').textContent = level;
+    document.getElementById('profileSubtitle').textContent = userName + ', you’re officially a ' + level + '!';
+    document.getElementById('fanLevel').textContent = desc;
+    setTimeout(() => { document.getElementById('scoreBar').style.width = score + '%'; }, 300);
+    try { if (confettiAvailable) fireConfettiBurst({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#0ea5e9', '#38bdf8', '#7dd3fc'], shapes: ['circle'], gravity: 1, scalar: 1, zIndex: 10000 }); } catch(e) {}
+}
+
+function revealPrize() { document.getElementById('fanProfile').classList.add('hidden'); document.getElementById('revealSection').classList.remove('hidden'); }
+function showSurprise() { document.getElementById('revealSection').classList.add('hidden'); document.getElementById('surpriseSection').classList.remove('hidden'); }
+function goBackTo(target) { if (target === 'fanProfile') { document.getElementById('revealSection').classList.add('hidden'); document.getElementById('fanProfile').classList.remove('hidden'); } }
+function restartQuiz() { location.reload(); }
+
+function showReferralEarnerPath() {
+    document.getElementById('surpriseSection').classList.add('hidden');
+    document.getElementById('referralEarnerSection').classList.remove('hidden');
+    startReferralTimer();
+    const savedRef = localStorage.getItem('dj_ref_code');
+    document.getElementById('earnerRefLink').value = savedRef ? (window.location.origin + '?ref=' + savedRef) : (window.location.origin + '?ref=PENDING');
+    updateReferralStats(0); 
+}
+
+function goBackToSurprise() {
+    document.getElementById('referralEarnerSection').classList.add('hidden');
+    document.getElementById('surpriseSection').classList.remove('hidden');
+}
+
+function updateReferralStats(count) {
+    document.getElementById('refCountDisplay').textContent = count;
+    document.getElementById('claimableDisplay').textContent = (Math.floor(count / 20) * 50) + ' USDT';
+}
+
+function copyEarnerRef() {
+    navigator.clipboard.writeText(document.getElementById('earnerRefLink').value).then(() => alert('Referral link copied!'));
+}
+
+function showReferralFromFab() { alert('Complete your claim first to access your referral link!'); }
+
+let referralTimerInterval;
+function startReferralTimer() {
+    if (referralTimerInterval) clearInterval(referralTimerInterval);
+    let target = localStorage.getItem('ref_batch_target');
+    if (!target) { target = Date.now() + (48 * 60 * 60 * 1000); localStorage.setItem('ref_batch_target', target); }
+    function update() {
+        const remaining = target - Date.now();
+        if (remaining <= 0) {
+            document.getElementById('referralTimer').textContent = '00:00:00';
+            target = Date.now() + (48 * 60 * 60 * 1000);
+            localStorage.setItem('ref_batch_target', target);
+            return;
         }
-
-        function nextQuestion(num) {
-            if (num === 2) {
-                userName = document.getElementById('q1Answer').value.trim() || 'Fan';
-                for(let i=2; i<=10; i++) {
-                    const title = document.getElementById('q'+i+'Title');
-                    if(title) title.textContent = title.textContent.replace('[Name], ', userName + ', ');
-                }
-            }
-            document.getElementById('q' + (num - 1)).classList.add('hidden');
-            document.getElementById('q' + num).classList.remove('hidden');
-            currentQuestion = num;
-            updateProgress();
-        }
-
-        function goBack(num) {
-            document.getElementById('q' + num).classList.add('hidden');
-            document.getElementById('q' + (num - 1)).classList.remove('hidden');
-            currentQuestion = num - 1;
-            updateProgress();
-        }
-
-        function updateProgress() {
-            const percent = Math.round((currentQuestion / 10) * 100);
-            document.getElementById('progressFill').style.width = percent + '%';
-            document.getElementById('progressText').textContent = 'Question ' + currentQuestion + ' of 10 — ' + percent + '%';
-        }
-
-        function calculateFanProfile() {
-            let score = 10; 
-            if (answers[2]) score += 10;
-            for (let i = 3; i <= 10; i++) {
-                if (answers[i] === correctAnswers[i]) score += 10;
-            }
-
-            let level = '', desc = '';
-            if (score <= 30) { level = '👀 Casual Viewer'; desc = 'Just getting started!'; }
-            else if (score <= 50) { level = '🙂 Fan'; desc = 'You know the basics!'; }
-            else if (score <= 70) { level = '🔥 Dedicated Fan'; desc = 'Solid knowledge!'; }
-            else if (score <= 90) { level = '🐯 Super Fan'; desc = 'Impressive!'; }
-            else { level = '👑 Ultimate Dishon Fan'; desc = 'Perfect score!'; }
-
-            document.getElementById('q10').classList.add('hidden');
-            document.getElementById('progressContainer').classList.add('hidden');
-            document.getElementById('fanProfile').classList.remove('hidden');
-            
-            document.getElementById('scoreDisplay').textContent = score;
-            document.getElementById('fanLevelTitle').textContent = level;
-            document.getElementById('fanLevelDesc').textContent = userName + ', you're officially a ' + level + '!';
-        }
-
-        function revealPrize() {
-            document.getElementById('fanProfile').classList.add('hidden');
-            document.getElementById('revealSection').classList.remove('hidden');
-        }
-
-        function showSurprise() {
-            document.getElementById('revealSection').classList.add('hidden');
-            document.getElementById('surpriseSection').classList.remove('hidden');
-        }
-
-        function showReferralEarnerPath() {
-            document.getElementById('surpriseSection').classList.add('hidden');
-            document.getElementById('referralEarnerSection').classList.remove('hidden');
-            startReferralTimer();
-            
-            const savedRef = localStorage.getItem('dj_ref_code');
-            const linkInput = document.getElementById('earnerRefLink');
-            if (savedRef) {
-                linkInput.value = window.location.origin + '?ref=' + savedRef;
-            } else {
-                linkInput.value = window.location.origin + '?ref=PENDING';
-            }
-            updateReferralStats(0); 
-        }
-
-        function goBackToSurprise() {
-            document.getElementById('referralEarnerSection').classList.add('hidden');
-            document.getElementById('surpriseSection').classList.remove('hidden');
-        }
-
-        function showReferralSection() {
-            const savedLoginId = localStorage.getItem('dj_login_id');
-            if (!savedLoginId) {
-                alert('Complete your claim first to access your referral link!');
-                return;
-            }
-            document.getElementById('surpriseSection').classList.remove('hidden');
-            document.getElementById('referralFab').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function updateReferralStats(count) {
-            document.getElementById('refCountDisplay').textContent = count;
-            const batches = Math.floor(count / 20);
-            const claimable = batches * 50;
-            document.getElementById('claimableDisplay').textContent = claimable + ' USDT';
-        }
-
-        function copyEarnerRef() {
-            const link = document.getElementById('earnerRefLink');
-            navigator.clipboard.writeText(link.value).then(() => alert('Referral link copied!'));
-        }
-
-        let referralTimerInterval;
-        function startReferralTimer() {
-            if (referralTimerInterval) clearInterval(referralTimerInterval);
-            
-            let target = localStorage.getItem('ref_batch_target');
-            if (!target) {
-                target = Date.now() + (48 * 60 * 60 * 1000);
-                localStorage.setItem('ref_batch_target', target);
-            }
-            
-            function update() {
-                const now = Date.now();
-                const remaining = target - now;
-                
-                if (remaining <= 0) {
-                    document.getElementById('referralTimer').textContent = '00:00:00';
-                    target = Date.now() + (48 * 60 * 60 * 1000);
-                    localStorage.setItem('ref_batch_target', target);
-                    return;
-                }
-                
-                const h = Math.floor(remaining / (1000 * 60 * 60));
-                const m = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((remaining % (1000 * 60)) / 1000);
-                
-                document.getElementById('referralTimer').textContent = 
-                    h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
-            }
-            
-            update();
-            referralTimerInterval = setInterval(update, 1000);
-        }
-
-        // Update fan counter
-        setInterval(() => {
-            const counter = document.getElementById('fanCount');
-            if (counter) {
-                let currentCount = parseInt(counter.textContent.replace(/,/g, ''));
-                const change = Math.floor(Math.random() * 50) - 20;
-                currentCount += change;
-                counter.textContent = currentCount.toLocaleString();
-            }
-        }, 5000);
-    </script>
+        const h = Math.floor(remaining / (1000 * 60 * 60));
+        const m = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((remaining % (1000 * 60)) / 1000);
+        document.getElementById('referralTimer').textContent = h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+    }
+    update();
+    referralTimerInterval = setInterval(update, 1000);
+}
+</script>
 </body>
 </html>
