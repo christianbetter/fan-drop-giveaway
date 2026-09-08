@@ -3,511 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MrBeast Giveaway</title>
+    <title>Dishon Jay Giveaway</title>
     <link rel="icon" href="/favicon.ico">
     <script src="/assets/confetti.min.js"></script>
     <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        :root {
+            --primary-blue: #007BFF;
+            --dark-blue: #0056B3;
+            --light-blue: #80E5FF;
+            --sky-blue: #B3E0FF;
+            --white: #FFFFFF;
+            --off-white: #F0F8FF;
+            --text-dark: #0A2540;
+            --text-blue: #0056B3;
         }
         
         body { 
             font-family: 'Georgia', serif; 
-            color: #fff; 
+            color: var(--text-dark); 
             min-height: 100vh; 
-            background: url('photo.webp') center/cover no-repeat fixed; 
+            background: linear-gradient(180deg, var(--light-blue) 0%, #99EEFF 100%);
             position: relative; 
             touch-action: manipulation; 
-            background-color: #1a1a1a; 
         }
         
-        body::before { 
-            content: ''; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0, 0, 0, 0.8); 
-            z-index: 0; 
-        }
-        
-        /* Flowing Ticker */
         .ticker-wrap { 
-            position: fixed; 
-            top: 0; 
-            width: 100%; 
-            background: rgba(10, 10, 10, 0.95); 
-            border-bottom: 1px solid rgba(201, 168, 76, 0.3); 
-            overflow: hidden; 
-            height: 40px; 
-            line-height: 40px; 
-            z-index: 1000; 
+            position: fixed; top: 0; width: 100%; 
+            background: var(--white); 
+            border-bottom: 3px solid var(--primary-blue); 
+            overflow: hidden; height: 45px; line-height: 45px; z-index: 1000; 
+            box-shadow: 0 2px 10px rgba(0,123,255,0.2);
         }
+        .ticker { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; padding-left: 100%; }
+        .ticker-item { display: inline-block; padding: 0 2rem; color: var(--dark-blue); font-size: 0.9em; font-weight: 700; letter-spacing: 1px; }
+        .ticker-item::after { content: '✦'; margin-left: 2rem; color: var(--primary-blue); }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         
-        .ticker { 
-            display: inline-block; 
-            white-space: nowrap; 
-            animation: marquee 30s linear infinite; 
-            padding-left: 100%; 
-        }
-        
-        .ticker-item { 
-            display: inline-block; 
-            padding: 0 2rem; 
-            color: #c9a84c; 
-            font-size: 0.9em; 
-            font-weight: 600; 
-            letter-spacing: 1px; 
-        }
-        
-        .ticker-item::after { 
-            content: '✦'; 
-            margin-left: 2rem; 
-            color: #e4c76b; 
-        }
-        
-        @keyframes marquee { 
-            0% { transform: translateX(0); } 
-            100% { transform: translateX(-100%); } 
-        }
-        
-        /* Splash Screen */
         .splash-screen { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: transparent; 
-            z-index: 100; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-            padding: 20px; 
-            transition: opacity 0.8s ease, visibility 0.8s ease; 
-            margin-top: 40px; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--light-blue); z-index: 100; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            text-align: center; padding: 20px; transition: opacity 0.8s ease; 
         }
-        
-        .splash-screen.fade-out { 
-            opacity: 0; 
-            visibility: hidden; 
-            pointer-events: none; 
-        }
-        
-        .splash-screen.hidden { 
-            display: none !important; 
-        }
-        
+        .splash-screen.hidden { display: none !important; }
         .splash-media { 
-            max-width: 320px; 
-            width: 100%; 
-            border-radius: 12px; 
-            margin-bottom: 30px; 
-            box-shadow: 0 0 40px rgba(201, 168, 76, 0.4); 
-            overflow: hidden; 
-            background: #111; 
-            position: relative; 
-            z-index: 10; 
-            transition: opacity 0.8s ease, transform 0.8s ease; 
+            max-width: 320px; width: 100%; border-radius: 16px; margin-bottom: 30px; 
+            box-shadow: 0 15px 50px rgba(0, 123, 255, 0.4); overflow: hidden; background: var(--white); 
+            border: 3px solid var(--white);
         }
-        
-        .splash-media.fade-out { 
-            opacity: 0; 
-            transform: scale(0.85); 
-            pointer-events: none; 
-        }
-        
-        .splash-media img, .splash-media video { 
-            width: 100%; 
-            display: block; 
-            border-radius: 12px; 
-            object-fit: cover; 
-        }
-        
-        .splash-media .fallback-icon { 
-            font-size: 80px; 
-            padding: 40px; 
-            background: linear-gradient(135deg, #c9a84c, #e4c76b); 
-            color: #000; 
-        }
-        
-        .splash-screen h2 { 
-            font-size: 2em; 
-            color: #c9a84c; 
-            margin-bottom: 15px; 
-            z-index: 10; 
-            position: relative; 
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.9); 
-        }
-        
-        .splash-screen p { 
-            color: #ccc; 
-            font-size: 1.1em; 
-            margin-bottom: 30px; 
-            z-index: 10; 
-            position: relative; 
-            text-shadow: 1px 1px 6px rgba(0,0,0,0.9); 
-        }
-        
+        .splash-media video { width: 100%; display: block; border-radius: 12px; object-fit: cover; }
+        .splash-screen h2 { font-size: 2.2em; color: var(--dark-blue); margin-bottom: 15px; font-weight: 800; text-shadow: 0 2px 10px rgba(255,255,255,0.5); }
+        .splash-screen p { color: var(--text-dark); font-size: 1.15em; margin-bottom: 30px; font-weight: 500; }
         .splash-btn { 
-            padding: 18px 40px; 
-            background: linear-gradient(135deg, rgba(201, 168, 76, 0.95), rgba(228, 199, 107, 0.95)); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(201, 168, 76, 0.6); 
-            border-radius: 50px; 
-            color: #000; 
-            font-size: 1.2em; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            font-family: 'Georgia', serif; 
-            letter-spacing: 1px; 
-            z-index: 20; 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, 120px); 
-            opacity: 0; 
-            pointer-events: none; 
-            box-shadow: 0 8px 30px rgba(201, 168, 76, 0.4); 
+            padding: 20px 50px; background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); 
+            border: none; border-radius: 50px; color: var(--white); font-size: 1.25em; font-weight: 700; 
+            cursor: pointer; font-family: 'Georgia', serif; 
+            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.5);
+            transition: all 0.3s ease;
         }
+        .splash-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 123, 255, 0.6); }
+        .splash-btn:active { transform: translateY(-1px); }
         
-        .splash-btn.visible { 
-            opacity: 1; 
-            transform: translate(-50%, -50%); 
-            pointer-events: auto; 
-        }
+        .container { position: relative; z-index: 1; max-width: 650px; margin: 0 auto; padding: 80px 25px 40px; }
         
-        .splash-btn:active { 
-            transform: translate(-50%, -50%) scale(0.95); 
-        }
-        
-        /* Utilities */
-        .hidden { display: none !important; }
-        
-        .fade-in { 
-            animation: fadeIn 0.8s ease-in forwards; 
-        }
-        
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        
-        .container { 
-            position: relative; 
-            z-index: 1; 
-            max-width: 600px; 
-            margin: 0 auto; 
-            padding: 60px 20px 40px; 
-            opacity: 0; 
-        }
-        
-        .container.visible { opacity: 1; }
-        
-        /* Fan Counter */
         .fan-counter { 
-            background: rgba(10, 10, 10, 0.9); 
-            border-radius: 8px; 
-            padding: 12px 20px; 
-            margin-bottom: 25px; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            font-size: 0.9em; 
-            color: #ccc; 
-            border: 1px solid rgba(201, 168, 76, 0.2); 
+            background: var(--white); border-radius: 12px; padding: 15px 25px; margin-bottom: 30px; 
+            display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 1em; 
+            color: var(--text-dark); border: 2px solid var(--sky-blue); 
+            box-shadow: 0 5px 20px rgba(0,123,255,0.15); font-weight: 600;
         }
+        .fan-counter::before { content: ''; width: 10px; height: 10px; background: var(--primary-blue); border-radius: 50%; animation: pulse 2s infinite; box-shadow: 0 0 10px var(--primary-blue); }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.9); } }
+        .fan-count { color: var(--dark-blue); font-weight: 800; font-size: 1.1em; }
         
-        .fan-counter::before { 
-            content: ''; 
-            width: 8px; 
-            height: 8px; 
-            background: #ff4444; 
-            border-radius: 50%; 
-            animation: pulse 2s infinite; 
+        .header { text-align: center; margin-bottom: 35px; }
+        .header h1 { font-size: 2.5em; font-weight: 800; margin-bottom: 10px; color: var(--dark-blue); text-shadow: 0 2px 10px rgba(255,255,255,0.5); }
+        .header h2 { font-size: 1.2em; font-weight: 500; color: var(--text-blue); }
+        
+        .progress-container { margin-bottom: 30px; background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,123,255,0.1); }
+        .progress-bar { width: 100%; height: 8px; background: var(--off-white); border-radius: 4px; overflow: hidden; border: 1px solid var(--sky-blue); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary-blue), var(--light-blue)); transition: width 0.6s ease; }
+        .progress-text { text-align: center; font-size: 0.9em; color: var(--dark-blue); margin-top: 10px; font-weight: 700; }
+        
+        .question-card, .fan-profile, .form-section, .success-state { 
+            background: var(--white); border-radius: 16px; padding: 35px 30px; margin-bottom: 25px; 
+            box-shadow: 0 10px 40px rgba(0, 123, 255, 0.15); border: 2px solid var(--sky-blue); 
+            transition: transform 0.3s ease;
         }
-        
-        @keyframes pulse { 
-            0%, 100% { opacity: 1; } 
-            50% { opacity: 0.5; } 
-        }
-        
-        .fan-count { 
-            color: #c9a84c; 
-            font-weight: 600; 
-        }
-        
-        /* Header & Progress */
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { font-size: 2.2em; font-weight: 700; margin-bottom: 10px; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); color: #c9a84c; }
-        .header h2 { font-size: 1.1em; font-weight: 300; color: #ccc; }
-        
-        .progress-container { margin-bottom: 25px; }
-        .progress-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #c9a84c, #e4c76b); transition: width 0.5s ease; }
-        .progress-text { text-align: center; font-size: 0.85em; color: #c9a84c; margin-top: 8px; }
-        
-        /* Question Cards */
-        .question-card { 
-            background: rgba(10, 10, 10, 0.95); 
-            border-radius: 12px; 
-            padding: 30px 25px; 
-            margin-bottom: 20px; 
-            backdrop-filter: blur(10px); 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6); 
-        }
-        .question-card h3 { font-size: 1.3em; margin-bottom: 20px; color: #fff; font-weight: 400; }
+        .question-card:hover { transform: translateY(-2px); box-shadow: 0 15px 50px rgba(0, 123, 255, 0.2); }
+        .question-card h3, .fan-profile h2, .form-section h3 { font-size: 1.4em; margin-bottom: 25px; color: var(--dark-blue); font-weight: 700; line-height: 1.3; }
         
         .option-btn { 
-            display: block; 
-            width: 100%; 
-            padding: 16px 20px; 
-            margin-bottom: 12px; 
-            background: rgba(201, 168, 76, 0.1); 
-            border-radius: 8px; 
-            color: #fff; 
-            font-size: 16px; 
-            cursor: pointer; 
-            transition: all 0.2s ease; 
-            text-align: left; 
-            font-family: 'Georgia', serif; 
-            border: 1px solid transparent; 
-            touch-action: manipulation; 
+            display: block; width: 100%; padding: 18px 22px; margin-bottom: 14px; 
+            background: var(--off-white); border-radius: 12px; color: var(--text-dark); font-size: 16px; 
+            cursor: pointer; text-align: left; font-family: 'Georgia', serif; 
+            border: 2px solid var(--sky-blue); transition: all 0.3s ease; font-weight: 500;
         }
+        .option-btn:hover { background: var(--sky-blue); border-color: var(--primary-blue); transform: translateX(5px); }
+        .option-btn.selected { background: var(--primary-blue); color: var(--white); border-color: var(--dark-blue); transform: scale(1.02); box-shadow: 0 5px 20px rgba(0,123,255,0.4); }
         .option-btn:active { transform: scale(0.98); }
-        .option-btn.selected { background: rgba(201, 168, 76, 0.35); border-color: rgba(201, 168, 76, 0.5); }
         
         .input-field { 
-            width: 100%; 
-            padding: 16px; 
-            background: rgba(10, 10, 10, 0.9); 
-            border-radius: 8px; 
-            color: #fff; 
-            font-size: 16px; 
-            font-family: 'Georgia', serif; 
-            margin-bottom: 10px; 
-            transition: all 0.3s ease; 
-            border: 1px solid rgba(255,255,255,0.1); 
+            width: 100%; padding: 18px; background: var(--off-white); border-radius: 12px; 
+            color: var(--text-dark); font-size: 16px; margin-bottom: 15px; border: 2px solid var(--sky-blue); 
+            font-family: 'Georgia', serif; transition: all 0.3s ease; font-weight: 500;
         }
-        .input-field:focus { outline: none; background: rgba(15, 15, 15, 0.95); box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.3); border-color: rgba(201, 168, 76, 0.5); }
-        .input-field::placeholder { color: #666; }
-        .input-field.error { border-color: #ff6464; box-shadow: 0 0 0 2px rgba(255, 100, 100, 0.3); }
-        .input-field.valid { border-color: #4caf50; box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3); }
+        .input-field:focus { outline: none; border-color: var(--primary-blue); background: var(--white); box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2); }
+        .input-field::placeholder { color: #7DA0C0; }
         
-        /* Percentage Slider */
-        .percentage-slider { margin: 25px 0; }
-        .percentage-slider label { display: block; margin-bottom: 15px; color: #ccc; font-size: 0.95em; }
-        .slider-container { position: relative; margin: 20px 0; }
-        .slider { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.1); outline: none; }
-        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #c9a84c, #e4c76b); cursor: pointer; box-shadow: 0 2px 10px rgba(201, 168, 76, 0.4); }
-        .slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #c9a84c, #e4c76b); cursor: pointer; border: none; box-shadow: 0 2px 10px rgba(201, 168, 76, 0.4); }
-        .percentage-value { text-align: center; font-size: 2em; color: #c9a84c; font-weight: 700; margin-top: 10px; }
+        .btn-group { display: flex; gap: 12px; margin-top: 15px; }
+        .continue-btn { 
+            flex: 1; padding: 18px; background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); 
+            border: none; border-radius: 12px; color: var(--white); font-size: 16px; font-weight: 700; 
+            cursor: pointer; font-family: 'Georgia', serif; 
+            box-shadow: 0 5px 20px rgba(0,123,255,0.3);
+            transition: all 0.3s ease;
+        }
+        .continue-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,123,255,0.4); }
+        .continue-btn:active { transform: translateY(0); }
+        .back-btn { 
+            flex: 0 0 auto; padding: 18px 25px; background: var(--off-white); border: 2px solid var(--sky-blue); 
+            border-radius: 12px; color: var(--dark-blue); font-size: 16px; cursor: pointer; font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover { background: var(--sky-blue); border-color: var(--primary-blue); }
         
-        /* Buttons */
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        .continue-btn { flex: 1; padding: 16px; background: linear-gradient(135deg, #c9a84c, #e4c76b); border: none; border-radius: 8px; color: #000; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: 'Georgia', serif; touch-action: manipulation; }
-        .continue-btn:active { transform: scale(0.98); }
-        .back-btn { flex: 0 0 auto; padding: 16px 20px; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; color: #fff; font-size: 16px; cursor: pointer; transition: all 0.2s ease; touch-action: manipulation; }
-        .back-btn:active { transform: scale(0.98); background: rgba(255,255,255,0.2); }
+        .fan-profile { text-align: center; }
+        .fan-profile h2 { color: var(--dark-blue); font-size: 1.3em; letter-spacing: 2px; margin-bottom: 20px; }
+        .fan-profile-title { font-size: 2.2em; margin: 15px 0; color: var(--dark-blue); font-weight: 800; }
+        .fan-profile-subtitle { color: var(--text-blue); font-size: 1.15em; margin-bottom: 25px; font-weight: 500; }
+        .score-circle { 
+            width: 140px; height: 140px; border-radius: 50%; 
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue)); 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 3em; font-weight: 800; color: var(--white); margin: 25px auto; 
+            box-shadow: 0 0 40px rgba(0, 123, 255, 0.5), inset 0 0 20px rgba(255,255,255,0.3);
+            border: 5px solid var(--white);
+        }
         
-        /* Fan Profile Results */
-        .fan-profile { background: rgba(10, 10, 10, 0.95); border-radius: 12px; padding: 35px 25px; text-align: center; margin-bottom: 20px; backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(0,0,0,0.6); }
-        .fan-profile h2 { color: #c9a84c; font-size: 1.1em; margin-bottom: 10px; letter-spacing: 2px; }
-        .fan-profile-title { font-size: 2em; margin-bottom: 8px; color: #fff; font-weight: 700; }
-        .fan-profile-subtitle { color: #888; font-size: 0.9em; margin-bottom: 30px; }
-        .stat-box { background: rgba(201, 168, 76, 0.05); border-radius: 10px; padding: 20px; margin-bottom: 20px; text-align: left; }
-        .stat-label { display: flex; justify-content: space-between; margin-bottom: 10px; color: #ccc; font-size: 0.95em; }
-        .stat-value { color: #c9a84c; font-weight: 600; }
-        .stat-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
-        .stat-fill { height: 100%; border-radius: 4px; transition: width 1s ease-out; }
-        .stat-fill.chaos { background: linear-gradient(90deg, #ff4444, #ff6b6b); }
-        .stat-fill.loyalty { background: linear-gradient(90deg, #ccff00, #e4c76b); }
-        .stat-fill.iq { background: linear-gradient(90deg, #4444ff, #6b8eff); }
-        .stat-fill.connection { background: linear-gradient(90deg, #ff44aa, #ff6bca); }
+        .hidden { display: none !important; }
         
-        /* Prize & Referral Boxes */
-        .prize-box { font-size: 1.2em; text-align: center; padding: 16px; background: rgba(201, 168, 76, 0.1); border-radius: 8px; margin: 0 auto 20px auto; display: inline-block; border: 1px solid rgba(201, 168, 76, 0.25); width: 100%; }
-        .referral-bonus { background: linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(228, 199, 107, 0.1)); border: 1px solid rgba(201, 168, 76, 0.3); border-radius: 10px; padding: 20px; margin: 20px 0; text-align: center; }
-        .referral-bonus h5 { color: #c9a84c; font-size: 1.1em; margin-bottom: 10px; }
-        .referral-bonus p { color: #ccc; font-size: 0.95em; margin-bottom: 15px; }
-        .referral-bonus .highlight { color: #fff; font-weight: 600; }
+        .timer-box { 
+            background: linear-gradient(135deg, var(--off-white), var(--white)); 
+            border-radius: 16px; padding: 30px; margin: 30px 0; text-align: center; 
+            border: 2px solid var(--sky-blue); 
+            box-shadow: 0 5px 20px rgba(0,123,255,0.1);
+        }
+        .timer-box h4 { color: var(--dark-blue); font-size: 1.2em; margin-bottom: 15px; font-weight: 700; }
+        .timer-display { font-size: 3em; color: var(--primary-blue); font-weight: 800; font-family: 'Courier New', monospace; margin: 15px 0; text-shadow: 0 2px 10px rgba(0,123,255,0.3); }
+        .timer-label { color: var(--text-blue); font-size: 0.95em; margin-bottom: 20px; font-weight: 500; }
         
-        /* Forms */
-        .form-section { background: rgba(10, 10, 10, 0.95); border-radius: 12px; padding: 25px; margin: 20px 0; }
-        .form-section h3 { font-size: 1.2em; margin-bottom: 10px; color: #c9a84c; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #ccc; font-size: 0.9em; }
-        .form-group input, .form-group textarea { width: 100%; padding: 16px; background: rgba(10, 10, 10, 0.9); border-radius: 8px; color: #fff; font-size: 16px; font-family: 'Georgia', serif; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
-        .form-group input:focus, .form-group textarea:focus { outline: none; box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.3); border-color: rgba(201, 168, 76, 0.5); }
+        .prize-box { 
+            font-size: 1.4em; text-align: center; padding: 20px; 
+            background: linear-gradient(135deg, var(--off-white), var(--white)); 
+            border-radius: 12px; margin: 25px 0; 
+            border: 3px solid var(--primary-blue); 
+            color: var(--dark-blue); font-weight: 700;
+            box-shadow: 0 5px 20px rgba(0,123,255,0.2);
+        }
         
-        .network-info { background: rgba(201, 168, 76, 0.1); border-radius: 8px; padding: 15px; margin-bottom: 20px; font-size: 0.9em; color: #ccc; word-break: break-all; border: 1px solid rgba(201, 168, 76, 0.2); }
-        .network-info strong { color: #c9a84c; }
-        .network-info .security-note { font-size: 0.8em; color: #888; margin-top: 8px; font-style: italic; }
-        .copy-btn { padding: 8px 16px; background: rgba(201, 168, 76, 0.2); border-radius: 6px; color: #c9a84c; cursor: pointer; font-size: 0.85em; margin-left: 10px; transition: all 0.3s ease; border: none; }
+        .referral-fab { 
+            position: fixed; bottom: 25px; left: 25px; 
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); 
+            color: var(--white); padding: 15px 25px; border-radius: 50px; 
+            font-weight: 700; cursor: pointer; 
+            box-shadow: 0 5px 20px rgba(0, 123, 255, 0.5); 
+            z-index: 999; border: none; font-family: 'Georgia', serif; 
+            font-size: 0.95em; transition: all 0.3s ease;
+        }
+        .referral-fab:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,123,255,0.6); }
+        .referral-fab.hidden { display: none; }
         
-        .math-check { display: flex; align-items: center; gap: 15px; margin: 20px 0; padding: 15px; background: rgba(201, 168, 76, 0.05); border-radius: 8px; }
-        .math-check label { color: #ccc; font-size: 0.95em; }
-        .math-check input { width: 80px; padding: 12px; background: rgba(10, 10, 10, 0.9); border-radius: 6px; color: #fff; font-size: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .referral-earner-section { 
+            background: var(--white); border-radius: 16px; padding: 35px 30px; margin-bottom: 25px; 
+            box-shadow: 0 10px 40px rgba(0, 123, 255, 0.15); border: 2px solid var(--sky-blue); 
+        }
+        .referral-earner-section h2 { color: var(--dark-blue); font-size: 1.5em; margin-bottom: 15px; font-weight: 700; text-align: center; }
+        .referral-earner-section p { color: var(--text-blue); text-align: center; margin-bottom: 25px; font-size: 1.05em; }
         
-        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #c9a84c, #e4c76b); border: none; border-radius: 8px; color: #000; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: 'Georgia', serif; touch-action: manipulation; }
-        .submit-btn:active { transform: scale(0.98); }
+        .stat-display { 
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            border-radius: 16px; padding: 30px; margin-bottom: 25px; 
+            text-align: center; color: var(--white);
+            box-shadow: 0 10px 30px rgba(0,123,255,0.3);
+        }
+        .stat-label { font-size: 1.1em; margin-bottom: 10px; opacity: 0.9; }
+        .stat-value { font-size: 3em; font-weight: 800; margin: 15px 0; }
+        .claimable-amount { font-size: 1.3em; margin-top: 15px; font-weight: 700; }
         
-        /* Success State & Timer */
-        .success-state { text-align: center; padding: 30px 20px; }
-        .success-state .checkmark { font-size: 3em; color: #c9a84c; margin-bottom: 20px; }
-        .success-state h3 { font-size: 1.4em; margin-bottom: 15px; color: #fff; }
-        .success-state p { color: #aaa; line-height: 1.6; font-size: 0.95em; }
-        
-        .timer-box { background: rgba(201, 168, 76, 0.15); border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center; border: 1px solid rgba(201, 168, 76, 0.3); }
-        .timer-box h4 { color: #c9a84c; font-size: 1.1em; margin-bottom: 10px; }
-        .timer-display { font-size: 2.5em; color: #fff; font-weight: 600; font-family: monospace; margin: 10px 0; }
-        .timer-label { color: #aaa; font-size: 0.9em; margin-bottom: 15px; }
-        .appeal-info { color: #ff9800; font-size: 0.9em; margin-bottom: 15px; font-style: italic; }
-        .appeal-btn { background: linear-gradient(135deg, #ff9800, #f57c00); color: #fff; padding: 14px 30px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.2s ease; width: 100%; }
-        .appeal-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4); }
-        .appeal-btn:active { transform: translateY(0); }
-        .appeal-btn.hidden { display: none; }
-        
-        /* Referral Section */
-        .referral-section { background: rgba(10, 10, 10, 0.95); border-radius: 12px; padding: 25px; margin: 20px 0; text-align: center; }
-        .referral-section h3 { font-size: 1.3em; margin-bottom: 10px; color: #c9a84c; }
-        .referral-link { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
-        .referral-link input { flex: 1; min-width: 200px; padding: 14px; background: rgba(10, 10, 10, 0.9); border-radius: 8px; color: #fff; font-size: 14px; font-family: monospace; border: 1px solid rgba(255,255,255,0.1); }
-        
-        .share-buttons { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
-        .share-btn { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; color: #fff; font-size: 1.3em; cursor: pointer; transition: all 0.2s ease; text-decoration: none; border: none; touch-action: manipulation; }
-        .share-btn:active { transform: scale(0.9); }
-        .share-x { background: #000; border: 1px solid #333; }
+        .share-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .share-btn { 
+            width: 50px; height: 50px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            color: var(--white); font-size: 1.4em; cursor: pointer; 
+            transition: all 0.3s ease; border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .share-btn:hover { transform: translateY(-3px) scale(1.1); }
+        .share-x { background: #000; }
         .share-facebook { background: #1877F2; }
         .share-whatsapp { background: #25D366; }
         .share-telegram { background: #0088cc; }
-        .share-threads { background: #000; border: 1px solid #333; }
-        .share-tiktok { background: #000; border: 1px solid #333; }
-        .share-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
         
-        .footer { text-align: center; padding: 30px 20px; color: #666; font-size: 0.85em; margin-top: 30px; }
-        .word-count { text-align: right; font-size: 0.8em; color: #888; margin-top: -5px; margin-bottom: 15px; }
-        .word-count.warn { color: #ff9800; }
-        
-        /* Modals */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .modal-overlay.hidden { display: none; }
-        .modal-box { background: #1a1a2e; border: 1px solid rgba(201, 168, 76, 0.3); border-radius: 12px; padding: 30px; max-width: 500px; width: 100%; text-align: center; }
-        .modal-box h3 { color: #c9a84c; margin-bottom: 15px; font-size: 1.4em; }
-        .modal-box p { color: #ccc; font-size: 0.95em; margin-bottom: 20px; }
-        .modal-box textarea { width: 100%; padding: 16px; background: rgba(10, 10, 10, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 16px; font-family: 'Georgia', serif; resize: vertical; min-height: 120px; margin-bottom: 10px; }
-        .modal-box textarea:focus { outline: none; border-color: rgba(201, 168, 76, 0.5); box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.2); }
-        .modal-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
-        .modal-cancel { background: rgba(255,255,255,0.1); color: #fff; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
-        .modal-submit { background: linear-gradient(135deg, #c9a84c, #e4c76b); color: #000; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; }
-        
-        /* Referral Popup - End Flow */
-        .referral-popup-icon { font-size: 3.5em; margin-bottom: 15px; animation: bounce 1s ease-in-out infinite alternate; }
-        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
-        .referral-popup-bonus { background: rgba(201, 168, 76, 0.1); border: 1px solid rgba(201, 168, 76, 0.3); border-radius: 8px; padding: 15px; margin: 15px 0; font-size: 0.95em; }
-        .referral-popup-bonus strong { color: #c9a84c; }
-        .referral-popup-subtitle { color: #888; font-size: 0.85em; margin-bottom: 20px; font-style: italic; }
-        .referral-popup-buttons { display: flex; gap: 10px; margin-top: 20px; }
-        .referral-popup-buttons button { flex: 1; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: 'Georgia', serif; }
-        .referral-yes-btn { background: linear-gradient(135deg, #c9a84c, #e4c76b); color: #000; }
-        .referral-yes-btn:active { transform: scale(0.95); }
-        .referral-no-btn { background: rgba(255,255,255,0.1); color: #fff; }
-        .referral-no-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.2); }
-        
-        /* Permanent Referral Button - Bottom Left */
-        .referral-fab {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, #c9a84c, #e4c76b);
-            color: #000;
-            padding: 12px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.9em;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(201, 168, 76, 0.4);
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .referral-link-box { 
+            background: var(--off-white); border-radius: 12px; padding: 20px; 
+            margin: 20px 0; border: 2px solid var(--sky-blue);
+        }
+        .referral-link-box input { 
+            width: 100%; padding: 14px; background: var(--white); 
+            border: 2px solid var(--sky-blue); border-radius: 8px; 
+            font-family: monospace; font-size: 0.95em; color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+        .copy-btn { 
+            padding: 12px 25px; background: var(--primary-blue); color: var(--white); 
+            border: none; border-radius: 8px; cursor: pointer; font-weight: 700;
             transition: all 0.3s ease;
-            border: none;
-            font-family: 'Georgia', serif;
         }
-        .referral-fab:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(201, 168, 76, 0.6);
-        }
-        .referral-fab:active {
-            transform: translateY(0);
-        }
-        .referral-fab.hidden {
-            display: none;
-        }
-        .referral-fab svg {
-            width: 18px;
-            height: 18px;
-        }
+        .copy-btn:hover { background: var(--dark-blue); transform: translateY(-2px); }
         
-        @media (max-width: 480px) {
-            .header h1 { font-size: 1.8em; }
-            .question-card, .form-section, .referral-section { padding: 20px; }
-            .splash-btn { padding: 16px 30px; font-size: 1.1em; }
-            .timer-display { font-size: 2em; }
-            .fan-profile-title { font-size: 1.6em; }
-            .referral-fab {
-                bottom: 15px;
-                left: 15px;
-                padding: 10px 16px;
-                font-size: 0.85em;
-            }
+        .footer { text-align: center; padding: 40px 20px; color: var(--text-blue); font-size: 0.9em; margin-top: 40px; font-weight: 500; }
+        
+        @media (max-width: 480px) { 
+            .header h1 { font-size: 2em; } 
+            .question-card, .fan-profile { padding: 25px 20px; }
+            .timer-display { font-size: 2.2em; }
+            .referral-fab { bottom: 15px; left: 15px; padding: 12px 18px; font-size: 0.85em; }
         }
     </style>
 </head>
 <body>
     <div class="ticker-wrap">
         <div class="ticker">
-            <span class="ticker-item">ENTRANCE AT 500 USDT</span>
+            <span class="ticker-item">ENTRANCE AT 2,000 USDT</span>
             <span class="ticker-item">ONE CLAIM PER FAN</span>
-            <span class="ticker-item">500 USDT ≋ 5000 USDT</span>
+            <span class="ticker-item">100 MINE ≋ 100 USDT</span>
             <span class="ticker-item">FAN APPRECIATION DROP</span>
             <span class="ticker-item">72 HOURS ONLY</span>
-            <span class="ticker-item">POOL • 5,000,000 USDT</span>
-            <span class="ticker-item">ENTRANCE AT 500 USDT</span>
+            <span class="ticker-item">POOL • 10,000 USDT</span>
+            <span class="ticker-item">ENTRANCE AT 2,000 USDT</span>
             <span class="ticker-item">ONE CLAIM PER FAN</span>
-            <span class="ticker-item">500 USDT ≋ 5000 USDT</span>
-            <span class="ticker-item">FAN APPRECIATION DROP</span>
-            <span class="ticker-item">72 HOURS ONLY</span>
-            <span class="ticker-item">POOL • 5,000,000 USDT</span>
         </div>
     </div>
 
-    <!-- Permanent Referral Button - Bottom Left -->
-    <button class="referral-fab hidden" id="referralFab" onclick="showReferralFromFab()">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-        🎁 Refer & Earn
-    </button>
+    <button class="referral-fab hidden" id="referralFab" onclick="showReferralSection()">🎁 Refer & Earn</button>
 
     <div class="splash-screen" id="splashScreen">
-        <div class="splash-media" id="splashMedia">
-            <video autoplay loop muted playsinline><source src="dishon-jay.mp4" type="video/mp4"><source src="dishon-jay.webm" type="video/webm"></video>
+        <div class="splash-media">
+            <video autoplay loop muted playsinline>
+                <source src="dishon-jay.webm" type="video/webm">
+            </video>
         </div>
-        <h2 id="splashTitle"> Welcome to the MrBeast Giveaway</h2>
-        <p id="splashSubtitle">Get ready for an exclusive fan appreciation exchange...</p>
-        <button class="splash-btn" id="splashBtn" onclick="enterSite()">Enter Giveaway</button>
+        <h2>Welcome to the Dishon Jay Giveaway</h2>
+        <p>Get ready for an exclusive fan appreciation exchange...</p>
+        <button class="splash-btn" onclick="enterSite()">Enter Giveaway</button>
     </div>
 
     <div class="container hidden" id="mainContent">
         <div class="header">
-            <h1>💵 MrBeast Giveaway</h1>
+            <h1>💵 Dishon Jay Giveaway</h1>
             <h2>Fan Appreciation Exchange</h2>
         </div>
         
@@ -516,739 +272,296 @@
         </div>
         
         <div class="progress-container" id="progressContainer">
-            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 10%"></div></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 10%"></div>
+            </div>
             <div class="progress-text" id="progressText">Question 1 of 10 — 10%</div>
         </div>
 
+        <!-- Q1 -->
         <div class="question-card" id="q1">
-            <h3>1. How can I call you?</h3>
-            <input type="text" class="input-field" id="q1Answer" placeholder="Your name" autocomplete="name">
-            <div class="btn-group"><button class="continue-btn" onclick="nextQuestion(2)">Continue</button></div>
-        </div>
-
-        <div class="question-card hidden" id="q2">
-            <h3>2. How long have you been a fan?</h3>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 2, 3)">Just found you</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 2, 3)">A few months</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 2, 3)">Since the very beginning</button>
-            <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(2)">← Back</button></div>
-        </div>
-
-        <div class="question-card hidden" id="q3">
-            <h3 id="q3Title">3. What moment of mine stuck with you?</h3>
-            <textarea class="input-field" id="q3Answer" placeholder="Share your favorite moment..." rows="3"></textarea>
+            <h3>1. First things first — what's your name?</h3>
+            <input type="text" class="input-field" id="q1Answer" placeholder="Your name">
             <div class="btn-group">
+                <button class="continue-btn" onclick="nextQuestion(2)">Continue</button>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-card hidden" id="q2">
+            <h3 id="q2Title">2. [Name], how did you first discover Dishon?</h3>
+            <button class="option-btn" onclick="selectOption(this, 2)">📺 YouTube recommendations</button>
+            <button class="option-btn" onclick="selectOption(this, 2)">👀 A friend showed me</button>
+            <button class="option-btn" onclick="selectOption(this, 2)"> Social media</button>
+            <button class="option-btn" onclick="selectOption(this, 2)">🏆 I saw one of his challenges</button>
+            <button class="option-btn" onclick="selectOption(this, 2)">🤷 I honestly can't remember</button>
+            <div class="btn-group" style="margin-top:20px;">
+                <button class="back-btn" onclick="goBack(2)">← Back</button>
+                <button class="continue-btn" onclick="nextQuestion(3)">Continue</button>
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-card hidden" id="q3">
+            <h3 id="q3Title">3. [Name], what type of videos is Dishon best known for?</h3>
+            <button class="option-btn" onclick="selectOption(this, 3)">🎮 Gaming tutorials</button>
+            <button class="option-btn" onclick="selectOption(this, 3)">💰 Huge challenges and giveaways</button>
+            <button class="option-btn" onclick="selectOption(this, 3)">🎬 Movie reviews</button>
+            <button class="option-btn" onclick="selectOption(this, 3)">🎵 Music videos</button>
+            <div class="btn-group" style="margin-top:20px;">
                 <button class="back-btn" onclick="goBack(3)">← Back</button>
                 <button class="continue-btn" onclick="nextQuestion(4)">Continue</button>
             </div>
         </div>
 
+        <!-- Q4 -->
         <div class="question-card hidden" id="q4">
-            <h3>4. Which country on my tour had the best stream?</h3>
-            <input type="text" class="input-field" id="q4Answer" placeholder="Country name" maxlength="15">
-            <div class="btn-group">
+            <h3 id="q4Title">4. [Name], which of these is Dishon's chocolate brand?</h3>
+            <button class="option-btn" onclick="selectOption(this, 4)">🍫 Feastables</button>
+            <button class="option-btn" onclick="selectOption(this, 4)"> Beast Bites</button>
+            <button class="option-btn" onclick="selectOption(this, 4)">🍫 MrChoco</button>
+            <button class="option-btn" onclick="selectOption(this, 4)">🍫 Chocolate Beast</button>
+            <div class="btn-group" style="margin-top:20px;">
                 <button class="back-btn" onclick="goBack(4)">← Back</button>
                 <button class="continue-btn" onclick="nextQuestion(5)">Continue</button>
             </div>
         </div>
 
+        <!-- Q5 -->
         <div class="question-card hidden" id="q5">
-            <h3>5. Ronaldo or Messi?</h3>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">Ronaldo 🐐</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">Messi</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 5, 6)">Both, don't make me choose</button>
-            <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(5)">← Back</button></div>
-        </div>
-
-        <div class="question-card hidden" id="q6">
-            <h3>6. What's my favorite soccer team?</h3>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">USA</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">Portugal 🇹</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 6, 7)">Argentina 🇦🇷</button>
-            <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(6)">← Back</button></div>
-        </div>
-
-        <div class="question-card hidden" id="q7">
-            <h3>7. I'd love to appreciate all fans personally, but I can't...</h3>
-            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9em;">On a scale of 0-100%, how appreciative are you of everything I do?</p>
-            <div class="percentage-slider">
-                <div class="slider-container">
-                    <input type="range" class="slider" id="q7Slider" min="0" max="100" value="75" oninput="updateSliderValue(this.value)">
-                </div>
-                <div class="percentage-value" id="sliderValue">75%</div>
+            <h3 id="q5Title">5. [Name], Dishon is famous for giving away huge amounts of what?</h3>
+            <button class="option-btn" onclick="selectOption(this, 5)"> Money and prizes</button>
+            <button class="option-btn" onclick="selectOption(this, 5)">🎮 Video games only</button>
+            <button class="option-btn" onclick="selectOption(this, 5)">👕 Clothing</button>
+            <button class="option-btn" onclick="selectOption(this, 5)">🎟️ Concert tickets</button>
+            <div class="btn-group" style="margin-top:20px;">
+                <button class="back-btn" onclick="goBack(5)">← Back</button>
+                <button class="continue-btn" onclick="nextQuestion(6)">Continue</button>
             </div>
-            <div class="btn-group">
+        </div>
+
+        <!-- Q6 -->
+        <div class="question-card hidden" id="q6">
+            <h3 id="q6Title">6. [Name], what was Dishon's famous tree-planting campaign called?</h3>
+            <button class="option-btn" onclick="selectOption(this, 6)">🌳 Team Trees</button>
+            <button class="option-btn" onclick="selectOption(this, 6)">🌱 Beast Forest</button>
+            <button class="option-btn" onclick="selectOption(this, 6)">🌎 Plant the Planet</button>
+            <button class="option-btn" onclick="selectOption(this, 6)">🌲 Beast Trees</button>
+            <div class="btn-group" style="margin-top:20px;">
+                <button class="back-btn" onclick="goBack(6)">← Back</button>
+                <button class="continue-btn" onclick="nextQuestion(7)">Continue</button>
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="question-card hidden" id="q7">
+            <h3 id="q7Title">7. [Name], which of these creators is strongly associated with Dishon's videos?</h3>
+            <button class="option-btn" onclick="selectOption(this, 7)">🐻 Chandler</button>
+            <button class="option-btn" onclick="selectOption(this, 7)">🎤 Drake</button>
+            <button class="option-btn" onclick="selectOption(this, 7)">⚽ Lionel Messi</button>
+            <button class="option-btn" onclick="selectOption(this, 7)">🎬 Tom Holland</button>
+            <div class="btn-group" style="margin-top:20px;">
                 <button class="back-btn" onclick="goBack(7)">← Back</button>
                 <button class="continue-btn" onclick="nextQuestion(8)">Continue</button>
             </div>
         </div>
 
+        <!-- Q8 -->
         <div class="question-card hidden" id="q8">
-            <h3>8. How do you connect with me most?</h3>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 8, 9)">Watching my live streams</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 8, 9)">Following on social media</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 8, 9)">Both, I'm everywhere</button>
-            <button class="option-btn" onclick="selectOptionAndContinue(this, 8, 9)">Through the community</button>
-            <div class="btn-group" style="margin-top: 20px;"><button class="back-btn" onclick="goBack(8)">← Back</button></div>
+            <h3 id="q8Title">8. [Name], what was Dishon originally known for doing on YouTube before his huge challenge videos took off?</h3>
+            <button class="option-btn" onclick="selectOption(this, 8)">🎮 Gaming and commentary</button>
+            <button class="option-btn" onclick="selectOption(this, 8)">🍳 Cooking tutorials</button>
+            <button class="option-btn" onclick="selectOption(this, 8)">✈️ Travel vlogs</button>
+            <button class="option-btn" onclick="selectOption(this, 8)">🎸 Music covers</button>
+            <div class="btn-group" style="margin-top:20px;">
+                <button class="back-btn" onclick="goBack(8)">← Back</button>
+                <button class="continue-btn" onclick="nextQuestion(9)">Continue</button>
+            </div>
         </div>
 
+        <!-- Q9 -->
         <div class="question-card hidden" id="q9">
-            <h3 id="q9Title">9. If we met in person, what would you say?</h3>
-            <textarea class="input-field" id="q9Answer" placeholder="What's on your mind..." rows="3"></textarea>
-            <div class="btn-group">
+            <h3 id="q9Title">9. [Name], which of these is NOT associated with Dishon's?</h3>
+            <button class="option-btn" onclick="selectOption(this, 9)">🍫 Feastables</button>
+            <button class="option-btn" onclick="selectOption(this, 9)"> Team Trees</button>
+            <button class="option-btn" onclick="selectOption(this, 9)">🌊 Team Seas</button>
+            <button class="option-btn" onclick="selectOption(this, 9)">🎧 Beast Music</button>
+            <div class="btn-group" style="margin-top:20px;">
                 <button class="back-btn" onclick="goBack(9)">← Back</button>
                 <button class="continue-btn" onclick="nextQuestion(10)">Continue</button>
             </div>
         </div>
 
-        <!-- UPDATED QUESTION 10 -->
+        <!-- Q10 -->
         <div class="question-card hidden" id="q10">
-            <h3 id="q10Title">10. If you were awarded a prize, what would you do with it?</h3>
-            <p style="color: #aaa; margin-bottom: 10px; font-size: 0.9em;">Tell us your plans! (Max 40 words)</p>
-            <textarea class="input-field" id="q10Answer" placeholder="I would use it to..." rows="3" maxlength="250"></textarea>
-            <div class="word-count" id="wordCount">0/40 words</div>
-            <div class="btn-group">
+            <h3 id="q10Title">10. [Name], you've made it to the final challenge! What makes Dishon's content stand out the most?</h3>
+            <button class="option-btn" onclick="selectOption(this, 10)">💰 Massive prizes and challenges</button>
+            <button class="option-btn" onclick="selectOption(this, 10)">🎬 Expensive movies</button>
+            <button class="option-btn" onclick="selectOption(this, 10)">🎵 Live concerts</button>
+            <button class="option-btn" onclick="selectOption(this, 10)">⚽ Professional sports</button>
+            <div class="btn-group" style="margin-top:20px;">
                 <button class="back-btn" onclick="goBack(10)">← Back</button>
-                <button class="continue-btn" onclick="calculateFanProfile()">See My Fan Profile</button>
+                <button class="continue-btn" onclick="calculateFanProfile()">See My Fan Score</button>
             </div>
         </div>
 
+        <!-- Fan Score Result -->
         <div class="fan-profile hidden" id="fanProfile">
-            <h2>YOUR FAN PROFILE</h2>
-            <div class="fan-profile-title" id="profileTitle">Football IQ Fan</div>
-            <div class="fan-profile-subtitle" id="profileSubtitle">Top 8% of fans who took this quiz</div>
-            <div class="stat-box"><div class="stat-label"><span>Chaos energy</span><span class="stat-value" id="chaosValue">65</span></div><div class="stat-bar"><div class="stat-fill chaos" id="chaosBar" style="width: 0%"></div></div></div>
-            <div class="stat-box"><div class="stat-label"><span>Loyalty</span><span class="stat-value" id="loyaltyValue">50</span></div><div class="stat-bar"><div class="stat-fill loyalty" id="loyaltyBar" style="width: 0%"></div></div></div>
-            <div class="stat-box"><div class="stat-label"><span>Football IQ</span><span class="stat-value" id="iqValue">80</span></div><div class="stat-bar"><div class="stat-fill iq" id="iqBar" style="width: 0%"></div></div></div>
-            <div class="stat-box"><div class="stat-label"><span>Connection Level</span><span class="stat-value" id="connectionValue">75</span></div><div class="stat-bar"><div class="stat-fill connection" id="connectionBar" style="width: 0%"></div></div></div>
-            <button class="continue-btn" style="width: 100%; margin-top: 20px;" onclick="revealPrize()">See what's next</button>
-            <p style="margin-top: 15px; color: #666; cursor: pointer;" onclick="restartQuiz()">Restart quiz</p>
+            <h2>YOUR FAN SCORE</h2>
+            <div class="score-circle" id="scoreDisplay">0</div>
+            <div class="fan-profile-title" id="fanLevelTitle">Calculating...</div>
+            <div class="fan-profile-subtitle" id="fanLevelDesc">Based on your answers</div>
+            <button class="continue-btn" style="width: 100%; margin-top: 20px;" onclick="revealPrize()">Continue to Prize</button>
         </div>
 
-        <div class="question-card hidden reveal-section" id="revealSection">
-            <h2 id="revealTitle">Thank you for being a fan. Seriously.</h2>
-            <p>None of this happens without people like you showing up. Here's your surprise ↓</p>
+        <!-- Prize Reveal -->
+        <div class="question-card hidden" id="revealSection">
+            <h2 id="revealTitle">Thank you for being a fan.</h2>
+            <p style="text-align: center; color: var(--text-blue); margin-bottom: 20px;">Here's your surprise ↓</p>
             <div class="btn-group" style="justify-content: center; margin-top: 20px;">
-                <button class="back-btn" onclick="goBackTo('fanProfile')">← Back</button>
-                <button class="continue-btn" style="flex: 2;" onclick="showSurprise()">Reveal it</button>
+                <button class="continue-btn" onclick="showSurprise()">Reveal Prize</button>
             </div>
         </div>
 
-        <div class="question-card hidden surprise-section" id="surpriseSection">
-            <h2>Your surprise</h2>
-            <p style="color: #ccc; font-size: 1.1em; margin-bottom: 20px;">You were live with me. Let's make it worth it.</p>
-            <p style="color: #c9a84c; font-size: 1em; margin-bottom: 10px;">The prize</p>
-            <div class="prize-box">500 USDT → 5000 USDT</div>
-            <p style="color: #ccc; font-size: 1em; margin: 20px 0;">Follow the instructions below to claim:</p>
-            
-            <button class="continue-btn" style="width: 100%;" onclick="showClaimForm()">Claim my 5000 USDT</button>
-            
-            <!-- NEW REFERRAL EARNER BUTTON -->
-            <button class="continue-btn" style="width: 100%; margin-top: 15px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);" onclick="showReferralEarnerPath()">
-                Don't have USDT? Refer 20 people & earn 50 USDT!
+        <!-- Surprise Section -->
+        <div class="question-card hidden" id="surpriseSection">
+            <h2 style="text-align: center; color: var(--dark-blue);">Your Surprise</h2>
+            <div class="prize-box">100 fan tokens → 100 USDT</div>
+            <button class="continue-btn" style="width: 100%; margin-bottom: 15px;" onclick="alert('Claim form opens here')">Claim my 100 USDT</button>
+            <button class="continue-btn" style="width: 100%; background: var(--off-white); color: var(--dark-blue); border: 2px solid var(--primary-blue);" onclick="showReferralEarnerPath()">
+                Don't have tokens? Refer 20 people & earn 50 USDT!
             </button>
         </div>
 
-        <!-- NEW REFERRAL EARNER SECTION -->
-        <div class="question-card hidden" id="referralEarnerSection">
+        <!-- Referral Earner Path -->
+        <div class="referral-earner-section hidden" id="referralEarnerSection">
             <h2>🚀 Referral Earner Path</h2>
-            <p style="color: #ccc; margin-bottom: 20px;">No USDT? No problem. Invite your friends and earn directly!</p>
+            <p>No tokens? No problem. Invite your friends and earn directly!</p>
             
-            <div class="stat-box" style="text-align: center; margin-bottom: 20px; background: rgba(201, 168, 76, 0.05); border-radius: 10px; padding: 20px;">
-                <div style="font-size: 0.9em; color: #888; margin-bottom: 5px;">Your Progress</div>
-                <div style="font-size: 2em; color: #c9a84c; font-weight: bold;"><span id="refCountDisplay">0</span> / 20 Referrals</div>
-                <div style="margin-top: 10px; color: #fff;">Claimable: <strong id="claimableDisplay" style="color: #4caf50;">0 USDT</strong></div>
+            <div class="stat-display">
+                <div class="stat-label">Your Progress</div>
+                <div class="stat-value"><span id="refCountDisplay">0</span> / 20 Referrals</div>
+                <div class="claimable-amount">Claimable: <span id="claimableDisplay" style="color: #fff;">0 USDT</span></div>
             </div>
 
-            <div class="timer-box" style="margin: 20px 0;">
+            <div class="timer-box">
                 <h4>⏱️ Next Verification Batch</h4>
                 <div class="timer-display" id="referralTimer">48:00:00</div>
                 <p class="timer-label">Since I verify manually alone, referral payouts are processed in batches every 48 hours.</p>
             </div>
 
-            <div class="referral-link" style="margin-top: 20px;">
+            <div class="referral-link-box">
                 <input type="text" id="earnerRefLink" readonly value="Loading your link...">
-                <button class="copy-btn" onclick="copyEarnerRef()">Copy</button>
+                <button class="copy-btn" onclick="copyEarnerRef()">Copy Link</button>
             </div>
-            <p style="color: #aaa; font-size: 0.85em; margin-top: 10px;">Share this link. Once you hit 20 signups, your 50 USDT enters the verification queue!</p>
+            <p style="color: var(--text-blue); font-size: 0.9em; margin-top: 15px; text-align: center;">Share this link. Once you hit 20 signups, your 50 USDT enters the verification queue!</p>
 
-            <div class="btn-group" style="margin-top: 20px;">
+            <div class="btn-group" style="margin-top: 25px;">
                 <button class="back-btn" onclick="goBackToSurprise()">← Back to Token Claim</button>
-            </div>
-        </div>
-
-        <div class="form-section hidden" id="claimStep1">
-            <h3>Step 1 of 2 — Tell me where to send your USDT</h3>
-            <div class="form-group">
-                <label>Wallet address to receive your 5000 USDT</label>
-                <input type="text" class="input-field" id="usdtAddress" placeholder="Any crypto wallet address (BTC, ETH, TRON, SOL, etc.)" oninput="validateField('usdtAddress')">
-                <div class="input-error" id="usdtError"><svg viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg><span id="usdtErrorText">Please enter a valid crypto wallet address.</span></div>
-            </div>
-            <div class="form-group">
-                <label>Email address (for confirmation)</label>
-                <input type="email" class="input-field" id="claimEmail" placeholder="your@email.com" oninput="validateField('claimEmail')">
-                <div class="input-error" id="emailError"><svg viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg><span id="emailErrorText">Please enter a valid email address.</span></div>
-            </div>
-            <div class="form-group">
-                <label>Referral ID (optional)</label>
-                <input type="text" class="input-field" id="referralId" placeholder="Enter referral ID if you have one">
-            </div>
-            <div class="form-group">
-                <label>The address you'll send the USDT from</label>
-                <input type="text" class="input-field" id="tokenAddress" placeholder="Any crypto wallet address (BTC, ETH, TRON, SOL, etc.)" oninput="validateField('tokenAddress')">
-                <div class="input-error" id="tokenError"><svg viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg><span id="tokenErrorText">Please enter a valid crypto wallet address.</span></div>
-            </div>
-            <div class="btn-group">
-                <button class="back-btn" onclick="goBackToClaim()">← Back</button>
-                <button class="continue-btn" onclick="showClaimStep2()">Continue to Step 2</button>
-            </div>
-        </div>
-
-        <div class="form-section hidden" id="claimStep2">
-            <h3>Step 2 of 2 — Send your USDT here</h3>
-            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9em;">Send exactly 500 USDT and get 5000 USDT in appreciation return.</p>
-            <div class="network-info">
-                <strong>Active Deposit Address:</strong><br>
-                <span id="tokenSendAddress" style="font-family: monospace; font-size: 0.95em; color: #fff; word-break: break-all;">LOADING...</span>
-                <button class="copy-btn" onclick="copyAddress()">Copy</button>
-                <div class="security-note">🔒 Address rotates periodically for security. Please send promptly.</div>
-            </div>
-            <p style="color: #aaa; font-size: 0.9em; margin-bottom: 20px;">You might a small amount for gas. Double-check your network.</p>
-            <div class="math-check">
-                <label>Quick check: what's 4 + 3?</label>
-                <input type="number" id="mathAnswer" placeholder="?">
-            </div>
-            <div class="btn-group">
-                <button class="back-btn" onclick="document.getElementById('claimStep2').classList.add('hidden'); document.getElementById('claimStep1').classList.remove('hidden');">← Back</button>
-                <button class="submit-btn" onclick="submitClaim()">Submit for confirmation</button>
-            </div>
-        </div>
-
-        <div class="success-state hidden" id="successState">
-            <div class="checkmark">✓</div>
-            <h3>Received — You're in the queue.</h3>
-            <p>I'll manually check your USDT token transfer and send your 5000 USDT. Expect it within 48 hours, with an email once it's sent.</p>
-            <p style="margin-top: 20px; color: #c9a84c;">Save your Login ID: <strong id="displayLoginId" style="color: #fff; font-family: monospace;"></strong></p>
-            <div class="timer-box">
-                <h4 id="timerTitle">⏱️ Processing Timer</h4>
-                <div class="timer-display" id="userTimer">48:00:00</div>
-                <p class="timer-label">Time remaining to receive your funds</p>
-                <p class="appeal-info">If funds are not received after 48 hours, you can launch an appeal.</p>
-                <button class="appeal-btn hidden" id="appealBtn" onclick="openAppealModal()">⚠️ Launch Appeal</button>
-            </div>
-        </div>
-
-        <div class="referral-section hidden" id="referralSection">
-            <h3>Share with your friends</h3>
-            <div class="referral-bonus">
-                <h5>🎁 Referral Bonus</h5>
-                <p>You get <span class="highlight">10 USDT for every 20 people</span> you share to and have a chance of winning <span class="highlight">10,000 USDT extra bonanza</span>!</p>
-                <p style="color: #c9a84c; font-size: 0.9em; margin-top: 10px;">Your Referral ID: <strong id="myReferralId" style="font-family: monospace; color: #fff;">Loading...</strong></p>
-            </div>
-            <div class="referral-link">
-                <input type="text" id="referralLink" readonly>
-                <button class="copy-btn" onclick="copyReferral()">Copy</button>
-            </div>
-            <p style="color: #ccc; font-size: 0.9em; margin-bottom: 10px;">Share via:</p>
-            <div class="share-buttons">
-                <a href="#" class="share-btn share-x" onclick="shareX(event)" title="Share on X"><svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                <a href="#" class="share-btn share-facebook" onclick="shareFacebook(event)" title="Share on Facebook"><svg viewBox="0 0 320 512" width="1em" height="1em" fill="currentColor"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg></a>
-                <a href="#" class="share-btn share-whatsapp" onclick="shareWhatsApp(event)" title="Share on WhatsApp"><svg viewBox="0 0 448 512" width="1em" height="1em" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></a>
-                <a href="#" class="share-btn share-telegram" onclick="shareTelegram(event)" title="Share on Telegram"><svg viewBox="0 0 496 512" width="1em" height="1em" fill="currentColor"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm121.8 169.9l-40.7 191.8c-3 13.6-11.1 16.9-22.4 10.5l-62-45.7-29.9 28.8c-3.3 3.3-6.1 6.1-12.5 6.1l4.4-63.1 114.9-103.8c5-4.4-1.1-6.9-7.7-2.5l-142 89.4-61.2-19.1c-13.3-4.2-13.6-13.3 2.8-19.7l239.1-92.2c11.1-4 20.8 2.7 17.2 19.5z"/></svg></a>
-                <a href="#" class="share-btn share-threads" onclick="shareThreads(event)" title="Share on Threads"><svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.598.024 12.179 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.59 12c.025 3.086.718 5.496 2.056 7.164 1.43 1.781 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.642-1.606 1.619-3.551 1.603-4.317v-.093c-.016-.766-.039-2.711-1.681-4.317-1.442-1.414-3.177-2.025-5.8-2.045-1.47.011-2.69.337-3.626.969-.936.632-1.53 1.517-1.765 2.626l2.04.569c.157-.742.517-1.278 1.07-1.596.553-.318 1.29-.486 2.19-.498 1.87.014 3.07.437 4.006 1.355.936.918.953 2.063.964 2.829v.093c.011.766-.028 1.911-.964 2.829-.936.918-2.136 1.341-4.006 1.355-1.87-.014-3.07-.437-4.006-1.355-.936-.918-.953-2.063-.964-2.829v-.093c.011-.766.028-1.911.964-2.829.936-.918 2.136-1.341 4.006-1.355.899.012 1.637.18 2.19.498.553.318.913.854 1.07 1.596l-2.04-.569c-.235-1.109-.829-1.994-1.765-2.626-.936-.632-2.156-.958-3.626-.969-2.91-.022-5.11-.936-6.54-2.717C2.282 17.496 1.59 15.086 1.565 12c.025-3.086.718-5.496 2.056-7.164 1.43-1.781 3.631-2.695 6.54-2.717 4.406.031 7.2 2.055 8.304 6.015l2.04-.569c-.651-2.337-1.832-4.177-3.509-5.467C17.222.725 14.925.02 12.179 0h-.014z"/></svg></a>
-                <a href="#" class="share-btn share-tiktok" onclick="shareTikTok(event)" title="Share on TikTok"><svg viewBox="0 0 448 512" width="1em" height="1em" fill="currentColor"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg></a>
-                <a href="#" class="share-btn share-instagram" onclick="shareInstagram(event)" title="Share on Instagram"><svg viewBox="0 0 448 512" width="1em" height="1em" fill="currentColor"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
             </div>
         </div>
 
         <div class="footer">
             <p>Made with gratitude, for the people who show up.</p>
-            <p>· One entry per fan. ·</p>
-        </div>
-    </div>
-
-    <!-- 🎁 Referral Popup - Appears at the END (after countdown starts) -->
-    <div class="modal-overlay hidden" id="referralPopup">
-        <div class="modal-box">
-            <div class="referral-popup-icon">🎁</div>
-            <h3>Want to earn even more?</h3>
-            <p>Congratulations on claiming your prize! Now, would you like to unlock the <strong style="color: #c9a84c;">10,000 USDT referral bonanza</strong>?</p>
-            <div class="referral-popup-bonus">
-                <strong>10 USDT</strong> for every 20 people you refer<br>
-                + a shot at the <strong>10,000 USDT extra bonanza</strong>!
-            </div>
-            <p class="referral-popup-subtitle">It only takes a minute to set up. Your unique link is ready!</p>
-            <div class="referral-popup-buttons">
-                <button class="referral-no-btn" onclick="closeReferralPopup()">Maybe later</button>
-                <button class="referral-yes-btn" onclick="acceptReferralAtEnd()">Yes, show me how! 🚀</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Appeal Modal -->
-    <div class="modal-overlay hidden" id="appealModal">
-        <div class="modal-box">
-            <h3>⚠️ Launch Appeal</h3>
-            <p>Please describe your issue. Keep it under 50 words so our team can review it quickly.</p>
-            <textarea id="appealText" maxlength="350" placeholder="My wallet address is correct, but I haven't received the funds yet..."></textarea>
-            <div class="word-count" id="appealWordCount" style="text-align: right; margin-bottom: 15px;">0/50 words</div>
-            <div class="modal-buttons">
-                <button class="modal-cancel" onclick="closeAppealModal()">Cancel</button>
-                <button class="modal-submit" onclick="submitAppeal()">Submit Appeal</button>
-            </div>
+            <p style="margin-top: 10px;">· One entry per fan ·</p>
         </div>
     </div>
 
     <script>
-        function safeGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
-        function safeSet(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
-
-        let currentQuestion = 1; 
-        const totalQuestions = 10;
+        let currentQuestion = 1;
         let userName = '';
-        let userTimerInterval;
-        let confettiAvailable = typeof confetti !== 'undefined';
-        let myReferralId = '';
-        let myLoginId = '';
-        let confettiInFlight = false;
-        let fanScores = { chaos: 0, loyalty: 0, iq: 0, connection: 0 };
-        let referralPopupShown = false;
-
-        const depositAddresses = [
-            "TRb3Vw8woWYhds16MHpwdUQ23u2kQhKcni",
-            "TTHXW5YvrZZ2me2MLJbpB9GeZFmjAkwTf4",
-            "TSEZDzjQYGot7fugQaDPir8XT22sCS4hG5",
-            "TRb3Vw8woWYhds16MHpwdUQ23u2kQhKcni",
-            "TTHXW5YvrZZ2me2MLJbpB9GeZFmjAkwTf4",
-            
-        ];
-
-        function getRotatingAddress() {
-            const rotationInterval = 60 * 60 * 1000; 
-            const index = Math.floor((Date.now() / rotationInterval) % depositAddresses.length);
-            return depositAddresses[index];
-        }
-
-        function fireConfettiBurst(opts) {
-            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            if (confettiInFlight) return;
-            confettiInFlight = true;
-            for (let i = 0; i < 3; i++) {
-                setTimeout(() => { try { if (typeof confetti !== 'undefined') confetti(opts); } catch(e) {} }, i * 200);
-            }
-            setTimeout(() => { confettiInFlight = false; }, 1000);
-        }
-
-        function updateSliderValue(val) { 
-            document.getElementById('sliderValue').textContent = val + '%'; 
-        }
-
-        function updateFanCounter() {
-            const counter = document.getElementById('fanCount');
-            if (!counter) return;
-            let currentCount = parseInt(counter.textContent.replace(/,/g, ''));
-            const change = Math.floor(Math.random() * 50) - 20;
-            currentCount += change;
-            counter.textContent = currentCount.toLocaleString();
-        }
-        setInterval(updateFanCounter, 5000);
-
-        // 🎁 Referral popup functions - triggered at the END
-        function showReferralPopup() {
-            if (referralPopupShown) return;
-            const savedLoginId = safeGet('dj_login_id');
-            if (!savedLoginId) return; // Only show if they've submitted
-            
-            referralPopupShown = true;
-            document.getElementById('referralPopup').classList.remove('hidden');
-        }
-
-        function acceptReferralAtEnd() {
-            closeReferralPopup();
-            const referralSection = document.getElementById('referralSection');
-            if (referralSection) {
-                referralSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                referralSection.style.boxShadow = '0 0 30px rgba(201, 168, 76, 0.6)';
-                setTimeout(() => {
-                    referralSection.style.boxShadow = '';
-                }, 2000);
-            }
-        }
-
-        function closeReferralPopup() {
-            document.getElementById('referralPopup').classList.add('hidden');
-        }
-
-        function showReferralFromFab() {
-            const referralSection = document.getElementById('referralSection');
-            if (referralSection && !referralSection.classList.contains('hidden')) {
-                referralSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } else {
-                alert('Complete your claim first to access your referral link!');
-            }
-        }
-
-        setTimeout(() => {
-            const btn = document.getElementById('splashBtn');
-            if (btn && !btn.classList.contains('visible')) btn.classList.add('visible');
-        }, 3000);
-
-        (function init() {
-            const savedLoginId = safeGet('dj_login_id');
-            const savedRefCode = safeGet('dj_ref_code');
-            const submissionTime = safeGet('dj_submission_time');
-            
-            if (savedLoginId && savedRefCode) {
-                document.getElementById('splashScreen').classList.add('hidden');
-                document.getElementById('mainContent').classList.remove('hidden');
-                document.getElementById('mainContent').classList.add('visible');
-                document.getElementById('referralFab').classList.remove('hidden');
-                document.getElementById('mainContent').innerHTML = `
-                    <div class="ticker-wrap"><div class="ticker"><span class="ticker-item">ENTRANCE AT 2,000 USDT</span><span class="ticker-item">ONE CLAIM PER FAN</span><span class="ticker-item">500 USDT ≋ 5000 USDT</span><span class="ticker-item">FAN APPRECIATION DROP</span><span class="ticker-item">72 HOURS ONLY</span><span class="ticker-item">POOL • 10,000 USDT</span></div></div>
-                    <div class="header"><h1>💵 MrBeast Giveaway</h1><h2>Fan Appreciation Exchange</h2></div>
-                    <div class="fan-counter"><span class="fan-count">${Math.floor(Math.random() * 5000 + 10000).toLocaleString()}</span> fans building their profile right now</div>
-                    <div class="success-state">
-                        <div class="checkmark">✓</div>
-                        <h3>Received — You're in the queue.</h3>
-                        <p>I'll manually check your USDT token transfer and send your 5000 USDT. Expect it within 48 hours, with an email once it's sent.</p>
-                        <p style="margin-top: 20px; color: #c9a84c;">Your Login ID: <strong style="color: #fff; font-family: monospace;">${savedLoginId}</strong></p>
-                        <div class="timer-box">
-                            <h4>⏱️ Processing Timer</h4>
-                            <div class="timer-display" id="userTimer">48:00:00</div>
-                            <p class="timer-label">Time remaining to receive your funds</p>
-                            <p class="appeal-info">If funds are not received after 48 hours, you can launch an appeal.</p>
-                            <button class="appeal-btn hidden" id="appealBtn" onclick="openAppealModal()">⚠️ Launch Appeal</button>
-                        </div>
-                    </div>
-                    <div class="referral-section">
-                        <h3>Share with your friends</h3>
-                        <div class="referral-bonus">
-                            <h5>🎁 Referral Bonus</h5>
-                            <p>You get <span class="highlight">50 USDT for every 20 people</span> you share to and have a chance of winning <span class="highlight">10,000 USDT extra bonanza</span>!</p>
-                            <p style="color: #c9a84c; font-size: 0.9em; margin-top: 10px;">Your Referral ID: <strong style="font-family: monospace; color: #fff;">${savedRefCode}</strong></p>
-                        </div>
-                        <div class="referral-link">
-                            <input type="text" value="${window.location.origin}?ref=${savedRefCode}" readonly id="referralLink">
-                            <button class="copy-btn" onclick="copyReferral()">Copy</button>
-                        </div>
-                        <p style="color: #ccc; font-size: 0.9em; margin-bottom: 10px;">Share via:</p>
-                        <div class="share-buttons">
-                            <a href="#" class="share-btn share-x" onclick="shareX(event)"><svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                            <a href="#" class="share-btn share-facebook" onclick="shareFacebook(event)"><svg viewBox="0 0 320 512" width="1em" height="1em" fill="currentColor"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg></a>
-                            <a href="#" class="share-btn share-whatsapp" onclick="shareWhatsApp(event)"><svg viewBox="0 0 448 512" width="1em" height="1em" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></a>
-                            <a href="#" class="share-btn share-telegram" onclick="shareTelegram(event)"><svg viewBox="0 0 496 512" width="1em" height="1em" fill="currentColor"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm121.8 169.9l-40.7 191.8c-3 13.6-11.1 16.9-22.4 10.5l-62-45.7-29.9 28.8c-3.3 3.3-6.1 6.1-12.5 6.1l4.4-63.1 114.9-103.8c5-4.4-1.1-6.9-7.7-2.5l-142 89.4-61.2-19.1c-13.3-4.2-13.6-13.3 2.8-19.7l239.1-92.2c11.1-4 20.8 2.7 17.2 19.5z"/></svg></a>
-                            <a href="#" class="share-btn share-threads" onclick="shareThreads(event)"><svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.598.024 12.179 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.59 12c.025 3.086.718 5.496 2.056 7.164 1.43 1.781 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.642-1.606 1.619-3.551 1.603-4.317v-.093c-.016-.766-.039-2.711-1.681-4.317-1.442-1.414-3.177-2.025-5.8-2.045-1.47.011-2.69.337-3.626.969-.936.632-1.53 1.517-1.765 2.626l2.04.569c.157-.742.517-1.278 1.07-1.596.553-.318 1.29-.486 2.19-.498 1.87.014 3.07.437 4.006 1.355.936.918.953 2.063.964 2.829v.093c.011.766-.028 1.911-.964 2.829-.936.918-2.136 1.341-4.006 1.355-1.87-.014-3.07-.437-4.006-1.355-.936-.918-.953-2.063-.964-2.829v-.093c.011-.766.028-1.911.964-2.829.936-.918 2.136-1.341 4.006-1.355.899.012 1.637.18 2.19.498.553.318.913.854 1.07 1.596l-2.04-.569c-.235-1.109-.829-1.994-1.765-2.626-.936-.632-2.156-.958-3.626-.969-2.91-.022-5.11-.936-6.54-2.717C2.282 17.496 1.59 15.086 1.565 12c.025-3.086.718-5.496 2.056-7.164 1.43-1.781 3.631-2.695 6.54-2.717 4.406.031 7.2 2.055 8.304 6.015l2.04-.569c-.651-2.337-1.832-4.177-3.509-5.467C17.222.725 14.925.02 12.179 0h-.014z"/></svg></a>
-                            <a href="#" class="share-btn share-tiktok" onclick="shareTikTok(event)"><svg viewBox="0 0 448 512" width="1em" height="1em" fill="currentColor"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg></a>
-                            <a href="#" class="share-btn share-instagram" onclick="shareInstagram(event)"><svg viewBox="0 0 448 512" width="1em" height="1em" fill="currentColor"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
-                        </div>
-                    </div>
-                    <div class="footer"><p>Made with gratitude, for the people who show up.</p><p>· One entry per fan. ·</p></div>
-                `;
-                if (submissionTime) startPersistentTimer(parseInt(submissionTime));
-                return;
-            }
-            
-            setTimeout(() => {
-                try {
-                    if (confettiAvailable) fireConfettiBurst({ particleCount: 80, spread: 70, origin: { y: 0.4 }, colors: ['#c9a84c', '#e4c76b', '#FFD700'], shapes: ['square', 'circle'], gravity: 0.9, scalar: 1.2, zIndex: 10000 });
-                } catch(e) { console.log('Confetti error:', e); }
-                const splashMedia = document.getElementById('splashMedia');
-                const splashTitle = document.getElementById('splashTitle');
-                const splashSubtitle = document.getElementById('splashSubtitle');
-                const splashBtn = document.getElementById('splashBtn');
-                if (splashMedia) splashMedia.classList.add('fade-out');
-                if (splashTitle) { splashTitle.style.transition = 'opacity 0.6s ease'; splashTitle.style.opacity = '0'; }
-                if (splashSubtitle) { splashSubtitle.style.transition = 'opacity 0.6s ease'; splashSubtitle.style.opacity = '0'; }
-                setTimeout(() => { if (splashBtn) splashBtn.classList.add('visible'); }, 400);
-            }, 1250);
-        })();
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const q10 = document.getElementById('q10Answer');
-            if (q10) {
-                q10.addEventListener('input', function() {
-                    const words = this.value.trim().split(/\s+/).filter(w => w.length > 0).length;
-                    const countEl = document.getElementById('wordCount');
-                    countEl.textContent = words + '/40 words';
-                    if (words >= 40) { countEl.classList.add('warn'); this.value = this.value.trim().split(/\s+/).slice(0, 40).join(' '); } 
-                    else { countEl.classList.remove('warn'); }
-                });
-            }
-            const appealText = document.getElementById('appealText');
-            if (appealText) {
-                appealText.addEventListener('input', function() {
-                    const words = this.value.trim().split(/\s+/).filter(w => w.length > 0).length;
-                    const countEl = document.getElementById('appealWordCount');
-                    countEl.textContent = words + '/50 words';
-                    if (words >= 50) { countEl.classList.add('warn'); this.value = this.value.trim().split(/\s+/).slice(0, 50).join(' '); } 
-                    else { countEl.classList.remove('warn'); }
-                });
-            }
-        });
+        let answers = {};
+        
+        const correctAnswers = {
+            3: '💰 Huge challenges and giveaways',
+            4: ' Feastables',
+            5: '💰 Money and prizes',
+            6: '🌳 Team Trees',
+            7: '🐻 Chandler',
+            8: ' Gaming and commentary',
+            9: '🎧 Beast Music',
+            10: '💰 Massive prizes and challenges'
+        };
 
         function enterSite() {
-            const splash = document.getElementById('splashScreen');
-            const mainContent = document.getElementById('mainContent');
-            splash.classList.add('fade-out');
-            setTimeout(() => {
-                splash.classList.add('hidden');
-                mainContent.classList.remove('hidden');
-                mainContent.classList.add('visible');
-                mainContent.classList.add('fade-in');
-                // Removed the second confetti burst here as requested
-            }, 800);
+            document.getElementById('splashScreen').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('referralFab').classList.remove('hidden');
         }
 
-        function selectOptionAndContinue(btn, questionNum, nextNum) {
-            const card = document.getElementById('q' + questionNum);
-            card.querySelectorAll('.option-btn').forEach(opt => opt.classList.remove('selected'));
+        function selectOption(btn, qNum) {
+            const card = document.getElementById('q' + qNum);
+            card.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            setTimeout(() => nextQuestion(nextNum), 300);
+            answers[qNum] = btn.textContent.trim();
         }
-        
+
         function nextQuestion(num) {
             if (num === 2) {
-                const nameVal = document.getElementById('q1Answer').value.trim();
-                if (!nameVal) { document.getElementById('q1Answer').classList.add('error'); document.getElementById('q1Answer').focus(); return; }
-                document.getElementById('q1Answer').classList.remove('error');
-                userName = nameVal;
-                personalizeQuestions();
-            }
-            if (num === 5) {
-                const countryVal = document.getElementById('q4Answer').value.trim();
-                if (!countryVal) { document.getElementById('q4Answer').classList.add('error'); document.getElementById('q4Answer').focus(); return; }
-                document.getElementById('q4Answer').classList.remove('error');
-            }
-            if (num === 8) {
-                fanScores.connection = parseInt(document.getElementById('q7Slider').value);
+                userName = document.getElementById('q1Answer').value.trim() || 'Fan';
+                for(let i=2; i<=10; i++) {
+                    const title = document.getElementById('q'+i+'Title');
+                    if(title) title.textContent = title.textContent.replace('[Name], ', userName + ', ');
+                }
             }
             document.getElementById('q' + (num - 1)).classList.add('hidden');
             document.getElementById('q' + num).classList.remove('hidden');
-            currentQuestion = num; updateProgress();
-        }
-
-        function personalizeQuestions() {
-            const q3Title = document.getElementById('q3Title');
-            if (q3Title && userName) q3Title.textContent = `3. ${userName}, what moment of mine stuck with you?`;
-            const q9Title = document.getElementById('q9Title');
-            if (q9Title && userName) q9Title.textContent = `9. ${userName}, if we met in person, what would you say?`;
-            const q10Title = document.getElementById('q10Title');
-            if (q10Title && userName) q10Title.textContent = `10. ${userName}, if you were awarded a prize, what would you do with it?`;
-            const revealTitle = document.getElementById('revealTitle');
-            if (revealTitle && userName) revealTitle.textContent = `Thank you for being a fan, ${userName}.`;
-            const timerTitle = document.getElementById('timerTitle');
-            if (timerTitle && userName) timerTitle.textContent = `⏱️ ${userName}'s Processing Timer`;
+            currentQuestion = num;
+            updateProgress();
         }
 
         function goBack(num) {
             document.getElementById('q' + num).classList.add('hidden');
             document.getElementById('q' + (num - 1)).classList.remove('hidden');
-            currentQuestion = num - 1; updateProgress();
-        }
-
-        function goBackTo(target) {
-            if (target === 'fanProfile') {
-                document.getElementById('revealSection').classList.add('hidden');
-                document.getElementById('fanProfile').classList.remove('hidden');
-            }
-        }
-
-        function goBackToClaim() {
-            document.getElementById('claimStep1').classList.add('hidden');
-            document.getElementById('surpriseSection').classList.remove('hidden');
+            currentQuestion = num - 1;
+            updateProgress();
         }
 
         function updateProgress() {
-            const percent = Math.round((currentQuestion / totalQuestions) * 100);
+            const percent = Math.round((currentQuestion / 10) * 100);
             document.getElementById('progressFill').style.width = percent + '%';
-            document.getElementById('progressText').textContent = 'Question ' + currentQuestion + ' of ' + totalQuestions + ' — ' + percent + '%';
+            document.getElementById('progressText').textContent = 'Question ' + currentQuestion + ' of 10 — ' + percent + '%';
         }
 
         function calculateFanProfile() {
-            const q2Answer = document.querySelector('#q2 .option-btn.selected')?.textContent || '';
-            if (q2Answer.includes('beginning')) fanScores.loyalty = 90 + Math.floor(Math.random() * 10);
-            else if (q2Answer.includes('months')) fanScores.loyalty = 60 + Math.floor(Math.random() * 20);
-            else fanScores.loyalty = 30 + Math.floor(Math.random() * 20);
-            fanScores.iq = 60 + Math.floor(Math.random() * 30);
-            fanScores.chaos = 40 + Math.floor(Math.random() * 50);
-            
-            let profileTitle, percentile;
-            const avgScore = (fanScores.loyalty + fanScores.iq + fanScores.connection) / 3;
-            if (avgScore >= 80) { profileTitle = 'Ultimate Superfan'; percentile = 'Top 2%'; } 
-            else if (avgScore >= 65) { profileTitle = 'Football IQ Fan'; percentile = 'Top 8%'; } 
-            else if (avgScore >= 50) { profileTitle = 'Dedicated Supporter'; percentile = 'Top 25%'; } 
-            else { profileTitle = 'Rising Fan'; percentile = 'Getting started'; }
-            
+            let score = 10; 
+            if (answers[2]) score += 10;
+            for (let i = 3; i <= 10; i++) {
+                if (answers[i] === correctAnswers[i]) score += 10;
+            }
+
+            let level = '', desc = '';
+            if (score <= 30) { level = '👀 Casual Viewer'; desc = 'Just getting started!'; }
+            else if (score <= 50) { level = '🙂 Fan'; desc = 'You know the basics!'; }
+            else if (score <= 70) { level = '🔥 Dedicated Fan'; desc = 'Solid knowledge!'; }
+            else if (score <= 90) { level = '🐯 Super Fan'; desc = 'Impressive!'; }
+            else { level = '👑 Ultimate Dishon Fan'; desc = 'Perfect score!'; }
+
             document.getElementById('q10').classList.add('hidden');
             document.getElementById('progressContainer').classList.add('hidden');
             document.getElementById('fanProfile').classList.remove('hidden');
-            document.getElementById('profileTitle').textContent = profileTitle;
-            document.getElementById('profileSubtitle').textContent = `${percentile} of fans who took this quiz`;
             
-            setTimeout(() => {
-                document.getElementById('chaosBar').style.width = fanScores.chaos + '%'; document.getElementById('chaosValue').textContent = fanScores.chaos;
-                document.getElementById('loyaltyBar').style.width = fanScores.loyalty + '%'; document.getElementById('loyaltyValue').textContent = fanScores.loyalty;
-                document.getElementById('iqBar').style.width = fanScores.iq + '%'; document.getElementById('iqValue').textContent = fanScores.iq;
-                document.getElementById('connectionBar').style.width = fanScores.connection + '%'; document.getElementById('connectionValue').textContent = fanScores.connection;
-            }, 300);
-            try { if (confettiAvailable) fireConfettiBurst({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#c9a84c', '#e4c76b', '#FFD700'], shapes: ['circle'], gravity: 1, scalar: 1, zIndex: 10000 }); } catch(e) {}
+            document.getElementById('scoreDisplay').textContent = score;
+            document.getElementById('fanLevelTitle').textContent = level;
+            document.getElementById('fanLevelDesc').textContent = userName + ', you're officially a ' + level + '!';
         }
 
-        function revealPrize() { document.getElementById('fanProfile').classList.add('hidden'); document.getElementById('revealSection').classList.remove('hidden'); }
-        function showSurprise() { 
-            document.getElementById('revealSection').classList.add('hidden'); 
-            document.getElementById('surpriseSection').classList.remove('hidden'); 
-            try { if (confettiAvailable) fireConfettiBurst({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#c9a84c', '#e4c76b', '#FFD700', '#FFA500'], shapes: ['square', 'circle'], gravity: 1.2, scalar: 1.3, zIndex: 10000 }); } catch(e) {}
-        }
-        function showClaimForm() { document.getElementById('surpriseSection').classList.add('hidden'); document.getElementById('claimStep1').classList.remove('hidden'); }
-
-        function isValidCryptoAddress(addr) {
-            if (!addr || addr.length < 20 || addr.length > 100) return false;
-            if (/^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/.test(addr)) return true;
-            if (/^bc1[ac-hj-np-zAC-HJ-NP-Z02-9]{11,71}$/.test(addr)) return true;
-            if (/^0x[a-fA-F0-9]{40}$/.test(addr)) return true;
-            if (/^T[a-zA-HJ-NP-Z1-9]{33}$/.test(addr)) return true;
-            if (/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(addr)) return true;
-            if (/^addr1[a-zA-HJ-NP-Z0-9]{50,98}$/.test(addr)) return true;
-            if (/^[LM3][a-km-zA-HJ-NP-Z1-9]{25,34}$/.test(addr)) return true;
-            if (/^bitcoincash:[a-z0-9]{42}$/.test(addr.toLowerCase())) return true;
-            if (/^[a-zA-Z0-9]{30,100}$/.test(addr) && !addr.includes(' ')) return true;
-            return false;
+        function revealPrize() {
+            document.getElementById('fanProfile').classList.add('hidden');
+            document.getElementById('revealSection').classList.remove('hidden');
         }
 
-        function validateField(fieldId) {
-            const input = document.getElementById(fieldId);
-            const error = document.getElementById(fieldId === 'usdtAddress' ? 'usdtError' : fieldId === 'claimEmail' ? 'emailError' : 'tokenError');
-            const val = input.value.trim();
-            if (!val) { input.classList.remove('valid'); input.classList.add('error'); error.classList.add('visible'); } 
-            else if (fieldId === 'claimEmail') {
-                if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { input.classList.remove('error'); input.classList.add('valid'); error.classList.remove('visible'); } 
-                else { input.classList.remove('valid'); input.classList.add('error'); error.classList.add('visible'); }
-            } else {
-                if (isValidCryptoAddress(val)) { input.classList.remove('error'); input.classList.add('valid'); error.classList.remove('visible'); } 
-                else { input.classList.remove('valid'); input.classList.add('error'); error.classList.add('visible'); }
-            }
+        function showSurprise() {
+            document.getElementById('revealSection').classList.add('hidden');
+            document.getElementById('surpriseSection').classList.remove('hidden');
         }
 
-        function showClaimStep2() { 
-            const usdtAddress = document.getElementById('usdtAddress').value.trim();
-            const claimEmail = document.getElementById('claimEmail').value.trim();
-            const tokenAddress = document.getElementById('tokenAddress').value.trim();
-            let valid = true;
-            if (!usdtAddress || !isValidCryptoAddress(usdtAddress)) { document.getElementById('usdtAddress').classList.add('error'); document.getElementById('usdtError').classList.add('visible'); document.getElementById('usdtErrorText').textContent = 'Please enter a valid crypto wallet address.'; valid = false; } 
-            else { document.getElementById('usdtAddress').classList.remove('error'); document.getElementById('usdtAddress').classList.add('valid'); document.getElementById('usdtError').classList.remove('visible'); }
-            if (!claimEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(claimEmail)) { document.getElementById('claimEmail').classList.add('error'); document.getElementById('emailError').classList.add('visible'); document.getElementById('emailErrorText').textContent = 'Please enter a valid email address.'; valid = false; } 
-            else { document.getElementById('claimEmail').classList.remove('error'); document.getElementById('claimEmail').classList.add('valid'); document.getElementById('emailError').classList.remove('visible'); }
-            if (!tokenAddress || !isValidCryptoAddress(tokenAddress)) { document.getElementById('tokenAddress').classList.add('error'); document.getElementById('tokenError').classList.add('visible'); document.getElementById('tokenErrorText').textContent = 'Please enter a valid crypto wallet address.'; valid = false; } 
-            else { document.getElementById('tokenAddress').classList.remove('error'); document.getElementById('tokenAddress').classList.add('valid'); document.getElementById('tokenError').classList.remove('visible'); }
-            if (valid) { document.getElementById('claimStep1').classList.add('hidden'); document.getElementById('claimStep2').classList.remove('hidden'); document.getElementById('tokenSendAddress').textContent = getRotatingAddress(); } 
-            else { const firstError = document.querySelector('.input-field.error'); if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        }
-        
-        async function submitClaim() {
-            const mathAnswer = document.getElementById('mathAnswer').value;
-            if (mathAnswer !== '7') { alert('Please answer the math question correctly.'); return; }
-            const usdtAddress = document.getElementById('usdtAddress').value.trim(); 
-            const claimEmail = document.getElementById('claimEmail').value.trim();
-            const tokenAddress = document.getElementById('tokenAddress').value.trim();
-            const referralId = document.getElementById('referralId').value.trim();
-            if (!usdtAddress || !claimEmail || !tokenAddress) { alert('Please fill in all required fields.'); return; }
-            if (!isValidCryptoAddress(usdtAddress) || !isValidCryptoAddress(tokenAddress)) { alert('Please enter valid crypto addresses.'); return; }
-            
-            const payload = { 
-                email: claimEmail, usdtAddress, tokenAddress, referralCode: referralId || null,
-                depositAddressUsed: getRotatingAddress(),
-                fanProfile: fanScores,
-                quizAnswers: {
-                    q1: document.getElementById('q1Answer').value.trim(),
-                    q2: document.querySelector('#q2 .option-btn.selected')?.textContent || '',
-                    q3: document.getElementById('q3Answer').value.trim(),
-                    q4: document.getElementById('q4Answer').value.trim(),
-                    q5: document.querySelector('#q5 .option-btn.selected')?.textContent || '',
-                    q6: document.querySelector('#q6 .option-btn.selected')?.textContent || '',
-                    q7: document.getElementById('q7Slider').value + '%',
-                    q8: document.querySelector('#q8 .option-btn.selected')?.textContent || '',
-                    q9: document.getElementById('q9Answer').value.trim(),
-                    q10: document.getElementById('q10Answer').value.trim()
-                }
-            };
-
-            try {
-                const res = await fetch('/api/signup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                const data = await res.json();
-                if (res.ok) { 
-                    myLoginId = data.loginId; myReferralId = data.referralCode;
-                    const submissionTime = Date.now();
-                    safeSet('dj_login_id', myLoginId); safeSet('dj_ref_code', myReferralId);
-                    safeSet('dj_email', claimEmail); safeSet('dj_submission_time', submissionTime.toString());
-                    document.getElementById('claimStep2').classList.add('hidden');
-                    document.getElementById('successState').classList.remove('hidden');
-                    document.getElementById('referralSection').classList.remove('hidden');
-                    document.getElementById('referralFab').classList.remove('hidden');
-                    document.getElementById('displayLoginId').textContent = myLoginId;
-                    document.getElementById('myReferralId').textContent = myReferralId;
-                    document.getElementById('referralLink').value = window.location.origin + '?ref=' + myReferralId;
-                    startPersistentTimer(submissionTime);
-                    try { if (confettiAvailable) fireConfettiBurst({ particleCount: 100, spread: 80, origin: { y: 0.6 }, colors: ['#c9a84c', '#e4c76b', '#FFD700', '#FFA500'], shapes: ['square', 'circle'], gravity: 1.2, scalar: 1.3, zIndex: 10000 }); } catch(e) {}
-                    
-                    // 🎁 Show referral popup 2 seconds after success
-                    setTimeout(() => {
-                        showReferralPopup();
-                    }, 2000);
-                } else { alert(data.error || 'Something went wrong.'); }
-            } catch (err) { console.error(err); alert('Network error. Please check your connection.'); }
-        }
-        
-        function startPersistentTimer(submissionTime) {
-            const fortyEightHours = 48 * 60 * 60 * 1000;
-            const endTime = submissionTime + fortyEightHours;
-            function updateTimer() {
-                const now = Date.now(); const remaining = endTime - now;
-                if (remaining <= 0) {
-                    const timerEl = document.getElementById('userTimer'); if (timerEl) timerEl.textContent = '00:00:00';
-                    const appealBtn = document.getElementById('appealBtn'); if (appealBtn) appealBtn.classList.remove('hidden');
-                    if (userTimerInterval) clearInterval(userTimerInterval); return;
-                }
-                const hours = Math.floor(remaining / (1000 * 60 * 60));
-                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-                const timerEl = document.getElementById('userTimer');
-                if (timerEl) timerEl.textContent = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
-            }
-            updateTimer(); userTimerInterval = setInterval(updateTimer, 1000);
-        }
-        
-        function openAppealModal() { document.getElementById('appealModal').classList.remove('hidden'); }
-        function closeAppealModal() { document.getElementById('appealModal').classList.add('hidden'); document.getElementById('appealText').value = ''; document.getElementById('appealWordCount').textContent = '0/50 words'; document.getElementById('appealWordCount').classList.remove('warn'); }
-        function submitAppeal() {
-            const text = document.getElementById('appealText').value.trim();
-            const words = text.split(/\s+/).filter(w => w.length > 0).length;
-            if (words === 0) { alert('Please describe your issue.'); return; }
-            if (words > 50) { alert('Your appeal must be 50 words or less.'); return; }
-            alert('✅ Appeal submitted successfully! Our team will review your case and contact you at ' + (safeGet('dj_email') || 'your email') + ' shortly.');
-            closeAppealModal();
-        }
-        
-        function copyAddress() { navigator.clipboard.writeText(getRotatingAddress()).then(() => alert('Address copied!')); }
-        function copyReferral() { navigator.clipboard.writeText(document.getElementById('referralLink').value).then(() => alert('Referral link copied!')); }
-        function getShareUrl() { return document.getElementById('referralLink').value || window.location.href; }
-        function getShareText() { return "I just claimed 100 USDT from the MrBeast Fan Giveaway! Join here: "; }
-        function shareX(e) { e.preventDefault(); window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(getShareText()) + '&url=' + encodeURIComponent(getShareUrl()), '_blank'); }
-        function shareFacebook(e) { e.preventDefault(); window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(getShareUrl()), '_blank'); }
-        function shareWhatsApp(e) { e.preventDefault(); window.open('https://wa.me/?text=' + encodeURIComponent(getShareText() + getShareUrl()), '_blank'); }
-        function shareTelegram(e) { e.preventDefault(); window.open('https://t.me/share/url?url=' + encodeURIComponent(getShareUrl()) + '&text=' + encodeURIComponent(getShareText()), '_blank'); }
-        function shareThreads(e) { e.preventDefault(); navigator.clipboard.writeText(getShareText() + getShareUrl()).then(() => { alert('Link copied! Opening Threads...'); window.open('https://www.threads.net/', '_blank'); }); }
-        function shareTikTok(e) { e.preventDefault(); navigator.clipboard.writeText(getShareText() + getShareUrl()).then(() => { alert('Link copied! Opening TikTok...'); window.open('https://www.tiktok.com/', '_blank'); }); }
-        function shareInstagram(e) { e.preventDefault(); navigator.clipboard.writeText(getShareText() + getShareUrl()).then(() => { alert('Link copied! Open Instagram and paste in Story or DM.'); window.open('https://www.instagram.com/', '_blank'); }); }
-        function restartQuiz() { location.reload(); }
-
-        // --- Referral Earner Path Logic ---
         function showReferralEarnerPath() {
             document.getElementById('surpriseSection').classList.add('hidden');
             document.getElementById('referralEarnerSection').classList.remove('hidden');
             startReferralTimer();
             
-            const savedRef = safeGet('dj_ref_code');
+            const savedRef = localStorage.getItem('dj_ref_code');
             const linkInput = document.getElementById('earnerRefLink');
             if (savedRef) {
                 linkInput.value = window.location.origin + '?ref=' + savedRef;
@@ -1261,6 +574,16 @@
         function goBackToSurprise() {
             document.getElementById('referralEarnerSection').classList.add('hidden');
             document.getElementById('surpriseSection').classList.remove('hidden');
+        }
+
+        function showReferralSection() {
+            const savedLoginId = localStorage.getItem('dj_login_id');
+            if (!savedLoginId) {
+                alert('Complete your claim first to access your referral link!');
+                return;
+            }
+            document.getElementById('surpriseSection').classList.remove('hidden');
+            document.getElementById('referralFab').scrollIntoView({ behavior: 'smooth' });
         }
 
         function updateReferralStats(count) {
@@ -1307,6 +630,17 @@
             update();
             referralTimerInterval = setInterval(update, 1000);
         }
+
+        // Update fan counter
+        setInterval(() => {
+            const counter = document.getElementById('fanCount');
+            if (counter) {
+                let currentCount = parseInt(counter.textContent.replace(/,/g, ''));
+                const change = Math.floor(Math.random() * 50) - 20;
+                currentCount += change;
+                counter.textContent = currentCount.toLocaleString();
+            }
+        }, 5000);
     </script>
 </body>
 </html>
