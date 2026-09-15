@@ -12,3 +12,4 @@ key.pem
 *.db-shm
 *.db-wal
 index1.html
+index2.html
